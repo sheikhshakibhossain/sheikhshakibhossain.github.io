@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulk Email Domain Filter | CSV Email Extractor</title>
+  <meta name="description" content="Filter and extract email addresses by domain from raw CSV text with multi-select domain filter chips and instant copy to clipboard.">
+  <meta name="keywords" content="email filter, csv email extractor, domain filter, gmail filter, bscse uiu, email list cleaner">
+  <meta name="author" content="Sheikh Shakib Hossain">
+
+  <!-- Inter Font from system / Google CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="site-header" role="banner">
+      <div class="header-left">
+        <div class="header-badge-group">
+          <span class="badge">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            Email Utility
+          </span>
+          <span class="badge badge-outline">Client-side &amp; Private</span>
+        </div>
+        <h1 class="site-title">Email Domain Filter</h1>
+        <p class="site-description">
+          Paste any CSV or email list, pick the domains you want using the multi-select buttons, and copy the filtered CSV results instantly.
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <a href="../index.html" class="btn btn-outline btn-sm" title="Back to Tools Directory">
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Tools
+        </a>
+        <a href="../../index.html" class="btn btn-outline btn-sm" title="Back to Portfolio">
+          Portfolio
+        </a>
+        <button id="theme-toggle-btn" class="btn btn-outline btn-icon-only btn-sm" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+          <!-- Sun icon (for dark mode to switch to light) -->
+          <svg id="theme-icon-light" class="icon icon-md" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <!-- Moon icon (for light mode to switch to dark) -->
+          <svg id="theme-icon-dark" class="icon icon-md" style="display:none;" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <main role="main">
+      <!-- Domain Filter Bar / Multi-select Area -->
+      <section class="filter-card" aria-labelledby="filter-section-title">
+        <div class="filter-header">
+          <div class="filter-title-group">
+            <h2 id="filter-section-title" class="filter-title">
+              <svg class="icon icon-md" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+              Domain Filters
+            </h2>
+            <span id="domain-stats-badge" class="badge">0 domains</span>
+          </div>
+
+          <div class="filter-actions">
+            <!-- Domain Search -->
+            <div class="domain-search-wrapper">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="domain-search-input" class="domain-search-input" placeholder="Search domains..." aria-label="Search domains">
+            </div>
+
+            <!-- Quick Selection Controls -->
+            <button id="select-all-domains-btn" class="btn btn-outline btn-sm" type="button" title="Select all detected domains">
+              Select All
+            </button>
+            <button id="deselect-all-domains-btn" class="btn btn-outline btn-sm" type="button" title="Deselect all domains">
+              Deselect All
+            </button>
+            <button id="invert-domains-btn" class="btn btn-outline btn-sm" type="button" title="Invert domain selection">
+              Invert
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Multi-select Buttons -->
+        <div id="domain-chips-container" class="domain-chips-container" role="group" aria-label="Domain selection filter chips">
+          <div class="empty-domains-msg">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span>No email domains detected yet. Paste CSV data on the left to extract domains.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2-Columns Workspace -->
+      <section class="workspace-grid" aria-label="Email filter workspace">
+        <!-- Left Column: Input CSV -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title-area">
+              <h3 class="panel-title">Input CSV / Raw Text</h3>
+              <span id="input-emails-count" class="badge badge-outline">0 emails</span>
+            </div>
+
+            <div class="panel-toolbar">
+              <button id="sample-btn" type="button" class="btn btn-outline btn-sm" title="Fill with sample data">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Sample
+              </button>
+              <button id="upload-btn" type="button" class="btn btn-outline btn-sm" title="Upload a CSV or text file">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                Upload
+              </button>
+              <input type="file" id="file-input" class="visually-hidden" accept=".csv,.txt" aria-label="Upload CSV file">
+              <button id="clear-btn" type="button" class="btn btn-ghost btn-sm" title="Clear input text">
+                <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <textarea
+              id="input-csv"
+              class="code-textarea"
+              placeholder="Paste your CSV data or email list here...&#10;&#10;Examples supported:&#10;• shakib@bscse.uiu.ac.bd, rahim@uiu.ac.bd, karim@gmail.com&#10;• Full CSV rows with Name, Email, Dept headers&#10;• Drag &amp; drop .csv or .txt file directly here"
+              spellcheck="false"
+              aria-label="Input CSV or email text"
+            ></textarea>
+            <div id="dropzone-overlay" class="dropzone-overlay">
+              <span class="dropzone-text">Drop CSV file to load</span>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="status-left">
+              <span id="input-lines-count">0 lines</span>
+            </div>
+            <div class="status-right">
+              <span>Automatic real-time parsing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Filtered Output CSV -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title-area">
+              <h3 class="panel-title">Filtered Output (CSV)</h3>
+              <span id="output-count-badge" class="badge">0 emails</span>
+            </div>
+
+            <div class="panel-toolbar">
+              <button id="download-btn" type="button" class="btn btn-secondary btn-sm" disabled title="Download filtered CSV file">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download
+              </button>
+              <button id="copy-btn" type="button" class="btn btn-primary btn-sm" disabled title="Copy filtered emails to clipboard">
+                <svg class="icon icon-md" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Output options / formatting bar -->
+          <div class="panel-options-bar">
+            <div class="options-group">
+              <label class="option-item">
+                <span>Output:</span>
+                <select id="output-mode-select" class="select-inline" aria-label="Output format mode">
+                  <option value="emails" selected>Emails Only</option>
+                  <option value="rows">Full CSV Rows</option>
+                </select>
+              </label>
+
+              <label class="option-item">
+                <span>Delimiter:</span>
+                <select id="delimiter-select" class="select-inline" aria-label="Delimiter">
+                  <option value="newline" selected>New Line (\n)</option>
+                  <option value="comma">Comma (,)</option>
+                  <option value="semicolon">Semicolon (;)</option>
+                </select>
+              </label>
+
+              <label class="option-item">
+                <span>Sort:</span>
+                <select id="sort-select" class="select-inline" aria-label="Sort order">
+                  <option value="none" selected>Original Order</option>
+                  <option value="asc">A-Z</option>
+                  <option value="domain">By Domain</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="options-group">
+              <label class="option-item" title="Remove duplicate emails">
+                <input type="checkbox" id="dedup-checkbox" checked>
+                <span>Deduplicate</span>
+              </label>
+
+              <label class="option-item" title="Convert emails to lowercase">
+                <input type="checkbox" id="lowercase-checkbox" checked>
+                <span>Lowercase</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <textarea
+              id="output-csv"
+              class="code-textarea"
+              placeholder="Filtered emails will be displayed here as CSV..."
+              readonly
+              spellcheck="false"
+              aria-label="Filtered output CSV"
+            ></textarea>
+          </div>
+
+          <div class="panel-footer">
+            <div class="status-left">
+              <span id="output-emails-count">0 emails displayed</span>
+            </div>
+            <div class="status-right">
+              <span id="output-selected-domains-count">0 domains active</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" aria-live="polite">
+    <div id="toast-notification" class="toast" role="status">
+      <svg class="icon icon-md" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      <span id="toast-message">Copied to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="scripts.js"></script>
+</body>
+</html>
