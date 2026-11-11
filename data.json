@@ -1,0 +1,106 @@
+{
+  "metrics": {
+    "experience_years": "3+",
+    "total_awards": "7",
+    "best_autonav_awards": "2",
+    "global_podiums": "5",
+    "current_role": "Lecturer, Dept. of CSE, UIU",
+    "department": "Dept. of CSE",
+    "institution": "United International University",
+    "rover_role": "Co-Team Lead (UIU Rover)",
+    "specialization": "Autonomous Robotics, Embedded & IoT"
+  },
+  "awards": [
+    {
+      "id": "urc-2026-3rd",
+      "year": "2026",
+      "rank": "3rd Position Globally",
+      "badge": "Global Top 3",
+      "isMajor": true,
+      "competition": "University Rover Challenge (URC) 2026",
+      "organizer": "The Mars Society",
+      "role": "Co-Team Lead",
+      "team": "UIU Mars Rover Team",
+      "location": "Hanksville, Utah, USA",
+      "description": "3rd Position Globally among 100+ global university rover teams at the Mars Desert Research Station."
+    },
+    {
+      "id": "urc-2026-nav",
+      "year": "2026",
+      "rank": "Best Autonomous Navigation System Recognition",
+      "badge": "Special Recognition",
+      "isMajor": false,
+      "competition": "University Rover Challenge (URC) 2026",
+      "organizer": "The Mars Society",
+      "role": "Co-Team Lead",
+      "team": "UIU Mars Rover Team",
+      "location": "Hanksville, Utah, USA",
+      "description": "Recognized for world-class autonomous navigation, custom GPS/IMU drivers, and multi-sensor fusion."
+    },
+    {
+      "id": "arc-2025-3rd",
+      "year": "2025",
+      "rank": "3rd Position Globally & 1st Among Asian Teams",
+      "badge": "#1 in Asia",
+      "isMajor": true,
+      "competition": "Anatolian Rover Challenge (ARC) 2025",
+      "organizer": "Space Exploration Society (UKET)",
+      "role": "Software Team Senior Member",
+      "team": "UIU Mars Rover Team",
+      "location": "Ankara, Turkey",
+      "description": "Secured 3rd place worldwide and 1st among all participating Asian university robotics teams."
+    },
+    {
+      "id": "arc-2025-nav",
+      "year": "2025",
+      "rank": "Best Autonomous Navigation System Award",
+      "badge": "Category Winner",
+      "isMajor": false,
+      "competition": "Anatolian Rover Challenge (ARC) 2025",
+      "organizer": "Space Exploration Society (UKET)",
+      "role": "Software Team Senior Member",
+      "team": "UIU Mars Rover Team",
+      "location": "Ankara, Turkey",
+      "description": "Awarded top honors for the most robust autonomous navigation and obstacle avoidance system."
+    },
+    {
+      "id": "urc-2024-5th",
+      "year": "2024",
+      "rank": "5th Position Globally & 1st Among Asian Teams",
+      "badge": "#1 in Asia",
+      "isMajor": true,
+      "competition": "University Rover Challenge (URC) 2024",
+      "organizer": "The Mars Society",
+      "role": "Software Team Lead",
+      "team": "UIU Mars Rover Team",
+      "location": "Hanksville, Utah, USA",
+      "description": "Ranked 5th in the world and 1st across Asia under software team leadership and system integration."
+    },
+    {
+      "id": "arc-2023-3rd",
+      "year": "2023",
+      "rank": "3rd Position Globally & 1st Among Asian Teams",
+      "badge": "#1 in Asia",
+      "isMajor": true,
+      "competition": "Anatolian Rover Challenge (ARC) 2023",
+      "organizer": "Space Exploration Society (UKET)",
+      "role": "Software Team Member",
+      "team": "UIU Mars Rover Team",
+      "location": "Ankara, Turkey",
+      "description": "Bronze podium finish globally and continental leadership across Asian university rover contenders."
+    },
+    {
+      "id": "urc-2023-9th",
+      "year": "2023",
+      "rank": "9th Position Globally & 1st Among Asian Teams",
+      "badge": "#1 in Asia",
+      "isMajor": false,
+      "competition": "University Rover Challenge (URC) 2023",
+      "organizer": "The Mars Society",
+      "role": "Software Team Member",
+      "team": "UIU Mars Rover Team",
+      "location": "Hanksville, Utah, USA",
+      "description": "Global top 10 finish and 1st in Asia during inaugural international competition deployment."
+    }
+  ]
+}

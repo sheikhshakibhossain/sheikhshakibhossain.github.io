@@ -1,267 +1,2060 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Who is Sheikh Shakib Hossain?</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Profile of a skilled software engineer and CSE student" />
-<meta name="keywords" content="software engineer, CSE, robotics, web development, profile" />
-<meta name="author" content="Sheikh Shakib Hossain" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sheikh Shakib Hossain | Lecturer, Dept. of CSE, UIU &amp; Robotics Engineer</title>
+  <meta name="description" content="Portfolio of Sheikh Shakib Hossain — Lecturer, Department of CSE, United International University (UIU). Robotics, Embedded Systems &amp; Autonomous Systems engineer and researcher. Co-Team Lead of UIU Mars Rover Team.">
+  <meta name="author" content="Sheikh Shakib Hossain">
+  <meta name="keywords" content="Sheikh Shakib Hossain, Lecturer CSE UIU, Robotics Engineer, Embedded Systems, Autonomous Systems, ROS2, Mars Rover, UIU, Computer Vision, IoT, Sensor Fusion">
 
-<!-- Font and CSS links -->
-<link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
-<link rel="stylesheet" href="css/animate.css">
-<link rel="stylesheet" href="css/icomoon.css">
-<link rel="stylesheet" href="css/bootstrap.css">
-<link rel="stylesheet" href="css/style.css">
-<script src="js/modernizr-2.6.2.min.js"></script>
+  <!-- OpenGraph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sheikhshakibhossain.github.io/">
+  <meta property="og:title" content="Sheikh Shakib Hossain | Lecturer, Dept. of CSE, UIU">
+  <meta property="og:description" content="Lecturer, Department of CSE at United International University (UIU). Robotics, Embedded Systems &amp; Autonomous Systems engineer, researcher, and educator.">
+  <meta property="og:image" content="images/me.jpg">
+
+  <!-- Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    // Early theme script to prevent FOUC (Flash of Unstyled Content)
+    (function () {
+      const savedTheme = localStorage.getItem('theme-mode');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    /* shadcn/ui Inspired Black & White Monochrome Design System */
+    :root {
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Light Mode */
+      --background: #ffffff;
+      --foreground: #09090b;
+      --card: #ffffff;
+      --card-foreground: #09090b;
+      --popover: #ffffff;
+      --popover-foreground: #09090b;
+      --primary: #18181b;
+      --primary-foreground: #fafafa;
+      --secondary: #f4f4f5;
+      --secondary-foreground: #18181b;
+      --muted: #f4f4f5;
+      --muted-foreground: #71717a;
+      --accent: #f4f4f5;
+      --accent-foreground: #18181b;
+      --border: #e4e4e7;
+      --input: #e4e4e7;
+      --input-focus: #09090b;
+      --ring: #18181b;
+      --radius: 0.5rem;
+      --badge-accent-bg: #f4f4f5;
+      --badge-accent-border: #e4e4e7;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+      --nav-bg: rgba(255, 255, 255, 0.85);
+      --tag-bg: #f4f4f5;
+      --tag-border: #e4e4e7;
+    }
+
+    .dark {
+      /* Dark Mode */
+      --background: #09090b;
+      --foreground: #fafafa;
+      --card: #09090b;
+      --card-foreground: #fafafa;
+      --popover: #09090b;
+      --popover-foreground: #fafafa;
+      --primary: #fafafa;
+      --primary-foreground: #18181b;
+      --secondary: #27272a;
+      --secondary-foreground: #fafafa;
+      --muted: #27272a;
+      --muted-foreground: #a1a1aa;
+      --accent: #27272a;
+      --accent-foreground: #fafafa;
+      --border: #27272a;
+      --input: #27272a;
+      --input-focus: #fafafa;
+      --ring: #d4d4d8;
+      --badge-accent-bg: #1c1c1f;
+      --badge-accent-border: #2e2e33;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+      --nav-bg: rgba(9, 9, 11, 0.85);
+      --tag-bg: #18181b;
+      --tag-border: #27272a;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--background);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted-foreground);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Layout Container */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 0 2rem;
+      }
+    }
+
+    /* Sticky Navbar */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-avatar {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+
+    .brand-name {
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-title-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      padding: 0.1rem 0.45rem;
+      border-radius: var(--radius);
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .brand-title-badge {
+        display: inline-block;
+      }
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+    }
+
+    @media (min-width: 860px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      transition: color 0.15s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--foreground);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Mobile Nav Toggle */
+    .mobile-menu-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 860px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+    }
+
+    .mobile-nav-panel {
+      display: none;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1.25rem 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--background);
+    }
+
+    .mobile-nav-panel.open {
+      display: flex;
+    }
+
+    .mobile-nav-panel .nav-link {
+      font-size: 0.95rem;
+      padding: 0.4rem 0;
+      color: var(--foreground);
+      font-weight: 500;
+    }
+
+    /* UI Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+      border: 1px solid var(--border);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .badge-outline {
+      background: transparent;
+      color: var(--muted-foreground);
+      font-weight: 500;
+    }
+
+    .badge-accent {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+
+    .badge-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      height: 2.25rem;
+      padding: 0 0.95rem;
+      border-radius: calc(var(--radius) - 1px);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease-in-out;
+      outline: none;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:focus-visible {
+      box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+    }
+
+    .btn-sm {
+      height: 2rem;
+      padding: 0 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-lg {
+      height: 2.6rem;
+      padding: 0 1.25rem;
+      font-size: 0.925rem;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--foreground);
+      border-color: var(--border);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--accent);
+      border-color: var(--foreground);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border);
+    }
+
+    .btn-icon-only {
+      width: 2.25rem;
+      padding: 0;
+    }
+
+    .btn-icon-only.btn-sm {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    /* Icons */
+    .icon {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .icon-sm {
+      width: 13px;
+      height: 13px;
+    }
+
+    .icon-md {
+      width: 18px;
+      height: 18px;
+    }
+
+    .icon-lg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 3.5rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    @media (min-width: 768px) {
+      .hero-section {
+        padding: 4.5rem 0 3.5rem;
+      }
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .hero-layout {
+        grid-template-columns: 1.15fr 380px;
+        gap: 3.5rem;
+      }
+    }
+
+    @media (min-width: 1100px) {
+      .hero-layout {
+        grid-template-columns: 1.2fr 400px;
+        gap: 4rem;
+      }
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .hero-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-name {
+      font-size: 2.35rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.15;
+      color: var(--foreground);
+    }
+
+    @media (min-width: 640px) {
+      .hero-name {
+        font-size: 3rem;
+      }
+    }
+
+    .hero-role {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: var(--muted-foreground);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-bio {
+      font-size: 1.025rem;
+      line-height: 1.7;
+      color: var(--foreground);
+      opacity: 0.92;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      padding-top: 0.5rem;
+    }
+
+    .hero-socials {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-top: 0.25rem;
+    }
+
+    /* Profile Showcase Column (Large View with Rounded Corners) */
+    .profile-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .profile-image-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      background: var(--card);
+    }
+
+    .profile-large-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      border-radius: 1.5rem;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+    }
+
+    .profile-image-frame:hover .profile-large-img {
+      transform: scale(1.03);
+    }
+
+    /* Floating Status Pill over image */
+    .profile-floating-badge {
+      position: absolute;
+      bottom: 0.85rem;
+      left: 0.85rem;
+      right: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 9999px;
+      background: rgba(9, 9, 11, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fafafa;
+      font-size: 0.775rem;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .dark .profile-floating-badge {
+      background: rgba(18, 18, 20, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .status-indicator-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      flex-shrink: 0;
+    }
+
+    /* Minimal Quick Info Chips below image */
+    .profile-quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+
+    .stat-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.15rem;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .stat-pill:hover {
+      border-color: var(--foreground);
+      transform: translateY(-1px);
+    }
+
+    .stat-pill-label {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted-foreground);
+    }
+
+    .stat-pill-value {
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--foreground);
+      white-space: nowrap;
+    }
+
+    /* Section Headers */
+    .section-wrap {
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    @media (min-width: 768px) {
+      .section-wrap {
+        padding: 4.5rem 0;
+      }
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 2.25rem;
+    }
+
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-foreground);
+    }
+
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--foreground);
+    }
+
+    .section-desc {
+      font-size: 0.95rem;
+      color: var(--muted-foreground);
+      max-width: 680px;
+    }
+
+    /* Technical Expertise 3-Column Grid */
+    .expertise-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .expertise-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .expertise-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: all 0.2s ease-in-out;
+      position: relative;
+    }
+
+    .expertise-card:hover {
+      border-color: var(--foreground);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .expertise-icon-box {
+      width: 2.75rem;
+      height: 2.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--foreground);
+    }
+
+    .expertise-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--foreground);
+      line-height: 1.3;
+    }
+
+    .expertise-desc {
+      font-size: 0.85rem;
+      color: var(--muted-foreground);
+      line-height: 1.5;
+    }
+
+    .expertise-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+      padding-top: 0.75rem;
+    }
+
+    .expertise-chip {
+      font-family: var(--font-mono);
+      font-size: 0.725rem;
+      padding: 0.2rem 0.55rem;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      border-radius: calc(var(--radius) - 2px);
+      color: var(--foreground);
+      font-weight: 500;
+      transition: border-color 0.15s ease;
+    }
+
+    .expertise-chip:hover {
+      border-color: var(--foreground);
+    }
+
+    /* International Awards Timeline Chain */
+    .timeline-chain {
+      position: relative;
+      padding-left: 2.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .timeline-chain::before {
+      content: '';
+      position: absolute;
+      left: 1.05rem;
+      top: 1.25rem;
+      bottom: 1.5rem;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--foreground) 0%, var(--border) 100%);
+    }
+
+    .chain-node {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .chain-node:last-child {
+      margin-bottom: 0;
+    }
+
+    .chain-marker {
+      position: absolute;
+      left: -2.75rem;
+      top: 1.15rem;
+      width: 2.15rem;
+      height: 2.15rem;
+      border-radius: 9999px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted-foreground);
+      z-index: 2;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 0 3px var(--background);
+    }
+
+    .chain-node.is-major .chain-marker {
+      border-color: var(--foreground);
+      background: var(--secondary);
+      color: var(--foreground);
+      box-shadow: 0 0 0 4px var(--background), var(--shadow-sm);
+    }
+
+    .chain-node:hover .chain-marker {
+      border-color: var(--foreground);
+      color: var(--foreground);
+      transform: scale(1.1);
+    }
+
+    .chain-connector {
+      position: absolute;
+      left: -0.6rem;
+      top: 2.15rem;
+      width: 0.6rem;
+      height: 2px;
+      background: var(--border);
+      transition: background 0.2s ease;
+    }
+
+    .chain-node:hover .chain-connector {
+      background: var(--foreground);
+    }
+
+    .chain-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chain-card:hover {
+      border-color: var(--foreground);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .chain-top {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    @media (min-width: 640px) {
+      .chain-top {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .chain-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .chain-year {
+      font-family: var(--font-mono);
+      font-size: 0.725rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      color: var(--foreground);
+    }
+
+    .chain-rank {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--foreground);
+    }
+
+    .chain-competition {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    .chain-desc {
+      font-size: 0.85rem;
+      color: var(--muted-foreground);
+      line-height: 1.5;
+    }
+
+    .chain-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+      border-top: 1px solid var(--border);
+      padding-top: 0.6rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Hero Social Buttons (Prominent / Bigger size) */
+    .social-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding-top: 0.5rem;
+    }
+
+    .social-btn-lg {
+      width: 2.85rem;
+      height: 2.85rem;
+      border-radius: calc(var(--radius) + 2px);
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--foreground);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+    }
+
+    .social-btn-lg svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .social-btn-lg:hover {
+      border-color: var(--foreground);
+      background-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .social-btn-lg:focus-visible {
+      box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+    }
+
+    .hero-actions-compact {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    /* Experience & Timeline */
+    .experience-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Progression Milestones inside Mars Rover Card */
+    .progression-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: 0.5rem;
+    }
+
+    .progression-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .progression-item:first-child {
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .progression-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .progression-role {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--foreground);
+    }
+
+    /* Detailed Timeline Cards */
+    .timeline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+    }
+
+    .timeline-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .timeline-card:hover {
+      border-color: var(--foreground);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .timeline-top {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .timeline-top {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+    }
+
+    .timeline-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .timeline-role {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--foreground);
+    }
+
+    .timeline-org {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+    }
+
+    .timeline-period {
+      font-family: var(--font-mono);
+      font-size: 0.775rem;
+      color: var(--muted-foreground);
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      align-self: flex-start;
+      white-space: nowrap;
+    }
+
+    .timeline-body {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--foreground);
+      opacity: 0.92;
+    }
+
+    /* Research Section */
+    .research-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .research-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .research-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.25rem;
+      transition: all 0.2s ease;
+    }
+
+    .research-card:hover {
+      border-color: var(--foreground);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .research-card-top {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .research-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .research-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      color: var(--foreground);
+    }
+
+    .research-org {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+    }
+
+    .research-body {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--foreground);
+      opacity: 0.9;
+    }
+
+    /* Tools Spotlight Callout Card */
+    .tools-spotlight {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .tools-spotlight:hover {
+      border-color: var(--foreground);
+    }
+
+    @media (min-width: 768px) {
+      .tools-spotlight {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .tools-spotlight-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-width: 620px;
+    }
+
+    .tools-spotlight-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--foreground);
+    }
+
+    .tools-spotlight-desc {
+      font-size: 0.9rem;
+      color: var(--muted-foreground);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .site-footer {
+      padding: 2.5rem 0 3.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted-foreground);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      align-items: center;
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .footer-inner {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+      }
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer-link {
+      transition: color 0.15s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--foreground);
+    }
+
+    /* Copy Feedback Toast */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--primary);
+      color: var(--primary-foreground);
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-    
-<div class="fh5co-loader"></div>
-    
-<div id="page">    
-<header id="fh5co-header" class="fh5co-cover js-fullheight" role="banner" style="background-image:url(images/cover_bg_3.jpg);" data-stellar-background-ratio="0.5">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 text-center">
-                <div class="display-t js-fullheight">
-                    <div class="display-tc js-fullheight animate-box" data-animate-effect="fadeIn">
-                        <div class="profile-thumb" style="background: url(images/me.jpg);"></div>
-                        <h1><span>Sheikh Shakib Hossain</span></h1>
-                        <h3><span>Software Engineer / CSE Student</span></h3>
-                        <p>
-                            <ul class="fh5co-social-icons">
-                                <li><a href="https://x.com/SheikhShak1b"><i class="icon-twitter2"></i></a></li>
-                                <li><a href="https://www.facebook.com/SheikhShakibHossa1n"><i class="icon-facebook2"></i></a></li>
-                                <li><a href="https://www.linkedin.com/in/sheikhshakibhossa1n"><i class="icon-linkedin2"></i></a></li>
-                                <li><a href="Shakib_CV.pdf"><i class="icon-dribbble2"></i></a></li>
-                            </ul>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
 
-<div id="fh5co-about" class="animate-box">
+  <!-- Navigation -->
+  <nav class="site-nav" aria-label="Main Navigation">
     <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                <h2>About Me</h2>
-            </div>
+      <div class="nav-inner">
+        <a href="#" class="brand">
+          <img src="images/me.jpg" alt="Sheikh Shakib Hossain" class="brand-avatar">
+          <span class="brand-name">
+            Sheikh Shakib Hossain
+            <span class="brand-title-badge">Lecturer, Dept. of CSE, UIU</span>
+          </span>
+        </a>
+
+        <div class="nav-links">
+          <!-- <a href="#about" class="nav-link">About</a> -->
+          <!-- <a href="#expertise" class="nav-link">Technical Expertise</a> -->
+          <a href="#awards" class="nav-link">International Awards</a>
+          <a href="#experience" class="nav-link">Experience</a>
+          <a href="#research" class="nav-link">Research</a>
+          <!-- <a href="tools/index.html" class="nav-link">Tools</a> -->
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <ul class="info">
-                    <li><span class="first-block">Full Name:</span><span class="second-block">Sheikh Shakib Hossain</span></li>
-                    <li><span class="first-block">Phone:</span><span class="second-block">+880 1920589868</span></li>
-                    <li><span class="first-block">Email:</span><span class="second-block">sheikhshakibhossain@gmail.com</span></li>
-                    <!-- <li><span class="first-block">Website:</span><span class="second-block">sheikhshakibhossain.github.io</span></li> -->
-                    <li><span class="first-block">Address:</span><span class="second-block">Dhaka, Bangladesh</span></li>
-                </ul>
+
+        <div class="nav-actions">
+          <a href="tools/index.html" class="btn btn-outline btn-sm" title="View Developer Tools Directory">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            Tools
+          </a>
+
+          <a href="Shakib_CV.pdf" class="btn btn-primary btn-sm" download title="Download CV">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            CV
+          </a>
+
+          <!-- Theme Toggle Button -->
+          <button id="theme-btn" class="btn btn-outline btn-icon-only btn-sm" aria-label="Toggle theme" title="Toggle theme">
+            <!-- Sun icon for dark mode -->
+            <svg id="theme-icon-light" class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <!-- Moon icon for light mode -->
+            <svg id="theme-icon-dark" class="icon" style="display:none;" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button id="mobile-menu-toggle" class="btn btn-outline btn-icon-only btn-sm mobile-menu-btn" aria-label="Toggle Mobile Menu">
+            <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Panel -->
+    <div id="mobile-nav-panel" class="mobile-nav-panel">
+      <a href="#about" class="nav-link mobile-link">About</a>
+      <a href="#expertise" class="nav-link mobile-link">Technical Expertise</a>
+      <a href="#awards" class="nav-link mobile-link">International Awards</a>
+      <a href="#experience" class="nav-link mobile-link">Experience</a>
+      <a href="#research" class="nav-link mobile-link">Research</a>
+      <a href="tools/index.html" class="nav-link mobile-link">Tools &amp; Utilities</a>
+      <a href="Shakib_CV.pdf" class="nav-link mobile-link" download>Download CV (PDF)</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header id="about" class="hero-section">
+    <div class="container">
+      <div class="hero-layout">
+        <div class="hero-content">
+          <div class="hero-badge-row">
+            <span class="badge badge-accent">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+              <span data-metric="current_role">Lecturer, Dept. of CSE, UIU</span>
+            </span>
+            <span class="badge badge-outline">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"></circle><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"></path></svg>
+              Dhaka, Bangladesh
+            </span>
+          </div>
+
+          <h1 class="hero-name">Sheikh Shakib Hossain</h1>
+          <p class="hero-role">Lecturer, Dept. of CSE, United International University &bull; Robotics, Embedded Systems &amp; Autonomous Systems Engineer</p>
+
+          <p class="hero-bio">
+            Robotics, Embedded Systems &amp; Autonomous Systems engineer, researcher, and robotics educator with hands-on experience spanning embedded firmware, sensor interfacing, autonomous robotic platforms, IoT systems, computer vision, and AI/ML. Experienced in designing and implementing basic hardware circuits, developing firmware and custom sensor libraries for NVIDIA embedded platforms, ROS2-based autonomous navigation, multi-sensor fusion, path planning, robotic manipulation, and real-time IoT monitoring. Co-Team Lead of the UIU Mars Rover Team with international competition experience and approximately three years of hands-on technical training and guidance of robotics team members and interns.
+          </p>
+
+          <div class="hero-actions-compact">
+            <a href="Shakib_CV.pdf" class="btn btn-primary btn-sm" download title="Download CV (PDF)">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download CV
+            </a>
+            <a href="tools/index.html" class="btn btn-outline btn-sm" title="Explore Developer Tools Directory">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              Tools Directory
+            </a>
+          </div>
+
+          <!-- Prominent / Relatively Bigger Social & Contact Buttons -->
+          <div class="social-row" aria-label="Social Profiles and Direct Contact">
+            <!-- GitHub -->
+            <a href="https://github.com/sheikhshakibhossain" target="_blank" rel="noopener noreferrer" class="social-btn-lg" aria-label="GitHub Profile" title="GitHub">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/in/sheikhshakibhossa1n" target="_blank" rel="noopener noreferrer" class="social-btn-lg" aria-label="LinkedIn Profile" title="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+            <!-- Email -->
+            <a href="mailto:sheikhshakibhossain@gmail.com" class="social-btn-lg" aria-label="Send Email" title="Email: sheikhshakibhossain@gmail.com">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </a>
+            <!-- Twitter / X -->
+            <a href="https://x.com/SheikhShak1b" target="_blank" rel="noopener noreferrer" class="social-btn-lg" aria-label="X / Twitter" title="X (Twitter)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+            </a>
+            <!-- WhatsApp -->
+            <a href="https://wa.me/SheikhShakibHossa1n" target="_blank" rel="noopener noreferrer" class="social-btn-lg" aria-label="WhatsApp Contact" title="Add me as a contact on WhatsApp">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"></path>
+                <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Profile Showcase Column (Large View with Rounded Corners) -->
+        <aside class="profile-showcase" aria-label="Faculty &amp; Research Profile">
+          <div class="profile-image-frame">
+            <img src="images/me.jpg" alt="Sheikh Shakib Hossain" class="profile-large-img">
+            <div class="profile-floating-badge">
+              <span class="status-indicator-dot" title="Active Faculty"></span>
+              <span data-metric="current_role">Lecturer, Dept. of CSE, UIU</span>
             </div>
-            <div class="col-md-8">
-                <h2>Hello There!</h2>
-                <p>I am a CSE student with a passion for robotics, software development, and innovative technology solutions. With extensive experience in building autonomous systems, creating user-friendly GUIs, and developing robust software applications, I have a proven track record of success in various projects and competitions.</p>
-                <p>I have worked on the UIU Mars Rover team, developed the Ahaar food donation platform, created Androhack for Android security research, and designed TrinityOS—a Linux distribution tailored for Bangladeshi users.</p>
-                <p>
-                    <ul class="fh5co-social-icons">
-                        <li><a href="https://x.com/SheikhShak1b"><i class="icon-twitter2"></i></a></li>
-                        <li><a href="https://www.facebook.com/SheikhShakibHossa1n"><i class="icon-facebook3"></i></a></li>
-                        <li><a href="https://www.linkedin.com/in/sheikhshakibhossa1n"><i class="icon-linkedin2"></i></a></li>
-                        <li><a href="Shakib_CV.pdf"><i class="icon-dribbble2"></i></a></li>
-                    </ul>
+          </div>
+
+          <div class="profile-quick-stats">
+            <div class="stat-pill">
+              <span class="stat-pill-label">Experience</span>
+              <span class="stat-pill-value"><span data-metric="experience_years">3+</span> Yrs</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-pill-label">Honors</span>
+              <span class="stat-pill-value"><span data-metric="total_awards">7</span> Awards</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-pill-label">Rover</span>
+              <span class="stat-pill-value" data-metric="rover_role">Co-Team Lead</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+
+ <!-- Professional Experience Section -->
+  <section id="experience" class="section-wrap">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          Career Timeline
+        </div>
+        <h2 class="section-title">Professional Experience</h2>
+        <p class="section-desc">
+          Industry engineering, robotics competition leadership, and STEM instruction spanning autonomous robotics, connected IoT systems, and low-level firmware.
+        </p>
+      </div>
+
+      <div class="experience-container">
+        <!-- Detailed Timeline Cards -->
+        <div class="timeline-list">
+
+          <!-- 2026 - Present: Lecturer, Dept. of CSE, United International University -->
+          <article class="timeline-card">
+            <div class="timeline-top">
+              <div class="timeline-title-block">
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                  <h3 class="timeline-role">Lecturer</h3>
+                  <span class="badge badge-accent badge-pill">Faculty Appointment</span>
+                </div>
+                <span class="timeline-org">Department of Computer Science &amp; Engineering, United International University (UIU)</span>
+              </div>
+              <span class="timeline-period">2026 &ndash; Present</span>
+            </div>
+            <p class="timeline-body">
+              Teaching undergraduate computer science and engineering coursework, mentoring student engineers, and leading technical initiatives in robotics, embedded systems, autonomous navigation, and IoT architectures.
+            </p>
+          </article>
+
+          <!-- 2026: Edusoft Consultants Ltd -->
+          <article class="timeline-card">
+            <div class="timeline-top">
+              <div class="timeline-title-block">
+                <h3 class="timeline-role">Full-Stack IoT Engineer</h3>
+                <span class="timeline-org">Edusoft Consultants Ltd.</span>
+              </div>
+              <span class="timeline-period">2026</span>
+            </div>
+            <p class="timeline-body">
+              Developing hardware automation systems and connected-device applications, with emphasis on device-to-application data flow, real-time monitoring, databases, and web-based system integration.
+            </p>
+          </article>
+
+          <!-- 2023 - 2026: UIU Mars Rover Team Engineering & Leadership Journey -->
+          <article class="timeline-card">
+            <div class="timeline-top">
+              <div class="timeline-title-block">
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                  <h3 class="timeline-role">UIU Mars Rover Team</h3>
+                  <span class="badge badge-pill">Engineering &amp; Leadership Progression</span>
+                </div>
+                <span class="timeline-org">Software Development, System Integration &amp; International Competitions</span>
+              </div>
+              <span class="timeline-period">2023 &ndash; 2026</span>
+            </div>
+
+            <div class="progression-list">
+              <!-- Milestone: 2026 Co-Team Lead -->
+              <div class="progression-item">
+                <div class="progression-header">
+                  <span class="progression-role">Co-Team Lead</span>
+                  <span class="badge badge-accent badge-pill">2026</span>
+                </div>
+                <p class="timeline-body">
+                  Led software development and system integration for the rover, contributing to autonomous navigation, sensor fusion, computer vision, path planning, robotic manipulation, hardware-software integration, testing, and field deployment. Designed and implemented embedded firmware, and wrote custom GPS and IMU libraries for NVIDIA embedded platforms where direct software support was unavailable. Trained and guided new team members and interns in robotics software development and autonomous systems.
                 </p>
-            </div>
-        </div>
-    </div>
-</div>
+              </div>
 
-<div id="fh5co-resume" class="fh5co-bg-color">
-    <div class="container">
-        <div class="row animate-box">
-            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                <h2>My Resume</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-md-offset-0">
-                <ul class="timeline">
-                    <li class="timeline-heading text-center animate-box">
-                        <div><h3>Work Experience</h3></div>
-                    </li>
-                    
-                    <li class="animate-box timeline-unverted">
-                        <div class="timeline-badge"><i class="icon-suitcase"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h3 class="timeline-title">Software Developer</h3>
-                                <span class="company">UIU Mars Rover Team - 2022 - 2024</span>
-                            </div>
-                            <div class="timeline-body">
-                                <p>Engineered an advanced Autonomous Navigation System utilizing ROS2, Python, and OpenCV. Designed and implemented sophisticated algorithms for real-time obstacle detection, dynamic path planning, and adaptive decision-making to enhance rover autonomy. Developed custom libraries for accurate GPS and compass integration, significantly improving navigation precision. Played a key role in creating a user-friendly GUI AppImage that processes and inputs rover's destination coordinates by scanning images using OpenCV, Python, and PyTesseract.</p>
-                            </div>
-                        </div>
-                    </li>
-                    
-                    <li class="timeline-inverted animate-box">
-                        <div class="timeline-badge"><i class="icon-suitcase"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h3 class="timeline-title">Web Developer</h3>
-                                <span class="company">2023 - Present</span>
-                            </div>
-                            <div class="timeline-body">
-                                <p>Designed and developed the Ahaar food donation platform and a Club Management System, employing HTML, CSS, PHP, and MySQL. Created a dynamic rover tracking application with offline map functionality using Leaflet.js, enabling real-time path tracking and enhanced data visualization.</p>
-                            </div>
-                        </div>
-                    </li>
-                    
-                    <li class="animate-box timeline-unverted">
-                        <div class="timeline-badge"><i class="icon-suitcase"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h3 class="timeline-title">Coding Tutor</h3>
-                                <span class="company">2022 - Present</span>
-                            </div>
-                            <div class="timeline-body">
-                                <p>Instructed students in C, Java, and Data Structures & Algorithms (DSA), focusing on simplifying complex concepts and emphasizing practical problem-solving skills. Provided mentorship and training for new team members in ROS2 development, facilitating their integration and skill development.</p>
-                            </div>
-                        </div>
-                    </li>
-                    
-                    <li class="timeline-inverted animate-box">
-                        <div class="timeline-badge"><i class="icon-suitcase"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h3 class="timeline-title">Linux Distro Developer</h3>
-                                <span class="company">2022 - Present</span>
-                            </div>
-                            <div class="timeline-body">
-                                <p>Developed TrinityOS, a custom Linux distribution tailored for Bangladeshi users. Implemented a unique package manager, Windows-like user interfaces, and system management utilities to enhance usability and system efficiency.</p>
-                            </div>
-                        </div>
-                    </li>
-                    
-                    <li class="timeline-unverted animate-box">
-                        <div class="timeline-badge"><i class="icon-suitcase"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h3 class="timeline-title">Security Developer</h3>
-                                <span class="company">2022 - Present</span>
-                            </div>
-                            <div class="timeline-body">
-                                <p>Created Androhack, a tool for identifying and interacting with vulnerable Android devices, and IntelliDOS, a robust solution for executing effective DoS attacks on modern routers, advancing security research and tool development.</p>
-                            </div>
-                        </div>
-                    </li>
-                    
-                    <li class="timeline-heading text-center animate-box">
-                        <div><h3>Education</h3></div>
-                    </li>
-                    
-                    <li class="timeline-inverted animate-box">
-                        <div class="timeline-badge"><i class="icon-graduation-cap"></i></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h3 class="timeline-title">Bachelor of Science in Computer Science and Engineering</h3>
-                                <span class="company">United International University - 2022 - Present</span>
-                            </div>
-                            <div class="timeline-body">
-                                <p>Specialized in robotics, software engineering, and algorithm development, focusing on creating practical solutions to address real-world challenges.</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div id="fh5co-features" class="animate-box">
-    <div class="container">
-        <div class="services-padding">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                    <h2>My Services</h2>
+              <!-- Milestone: 2025 Team Member – ARC -->
+              <div class="progression-item">
+                <div class="progression-header">
+                  <span class="progression-role">Team Member &ndash; ARC</span>
+                  <span class="badge badge-outline badge-pill">2025</span>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <div class="feature-left">
-                        <span class="icon">
-                            <i class="icon-code"></i>
-                        </span>
-                        <div class="feature-copy">
-                            <h3>Robotics</h3>
-                            <p>Developing software and complex algorithms for autonomous systems, including obstacle detection, path planning, and real-time decision-making using ROS2, Python, and OpenCV.</p>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-4 text-center">
-                    <div class="feature-left">
-                        <span class="icon">
-                            <i class="icon-laptop"></i>
-                        </span>
-                        <div class="feature-copy">
-                            <h3>Web Development</h3>
-                            <p>Building responsive web applications with a focus on user experience, using technologies like HTML, CSS, PHP, MySQL, and JavaScript.</p>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-4 text-center">
-                    <div class="feature-left">
-                        <span class="icon">
-                            <i class="icon-shield"></i>
-                        </span>
-                        <div class="feature-copy">
-                            <h3>Security Development</h3>
-                            <p>Creating tools for identifying and interacting with vulnerable devices, and developing effective security solutions like DoS attack tools for modern routers.</p>
-                        </div>
-                    </div>
-                </div>
-    
-            </div>
-        </div>
-    </div>
-</div>
-
-<footer id="fh5co-footer" role="contentinfo">
-    <div class="container">
-        <div class="row copyright">
-            <div class="col-md-12 text-center">
-                <p>
-                    <small class="block">&copy; 2024 Sheikh Shakib Hossain. All Rights Reserved.</small> 
-                    <small class="block">Designed by <a href="#" target="_blank">Sheikh Shakib Hossain</a></small>
+                <p class="timeline-body">
+                  Took a break from University Rover Challenge (URC) to improve academics, while continuing robotics activities through participation in the Anatolian Rover Challenge (ARC). Contributed to Rover Satellite communication protocol development for the competition.
                 </p>
-                <p>
-                    <ul class="fh5co-social-icons">
-                        <li><a href="https://x.com/SheikhShak1b"><i class="icon-twitter2"></i></a></li>
-                        <li><a href="https://www.facebook.com/SheikhShakibHossa1n"><i class="icon-facebook2"></i></a></li>
-                        <li><a href="https://www.linkedin.com/in/sheikhshakibhossa1n"><i class="icon-linkedin2"></i></a></li>
-                        <li><a href="Shakib_CV.pdf"><i class="icon-dribbble2"></i></a></li>
-                    </ul>
+              </div>
+
+              <!-- Milestone: 2024 Software Team Lead -->
+              <div class="progression-item">
+                <div class="progression-header">
+                  <span class="progression-role">Software Team Lead</span>
+                  <span class="badge badge-outline badge-pill">2024</span>
+                </div>
+                <p class="timeline-body">
+                  Led the software team in developing and testing rover systems, including autonomous navigation, sensor integration, computer vision, and robotic software. Contributed to system integration, debugging, and competition preparation.
                 </p>
+              </div>
+
+              <!-- Milestone: 2023 Team Member -->
+              <div class="progression-item">
+                <div class="progression-header">
+                  <span class="progression-role">Software Team Member</span>
+                  <span class="badge badge-outline badge-pill">2023</span>
+                </div>
+                <p class="timeline-body">
+                  Joined the UIU Mars Rover Team and contributed to hands-on rover development, software implementation, system testing, and robotics engineering activities.
+                </p>
+              </div>
             </div>
+          </article>
+
+          <!-- 2025 - 2026: Space Innovation Camp -->
+          <article class="timeline-card">
+            <div class="timeline-top">
+              <div class="timeline-title-block">
+                <h3 class="timeline-role">Robotics Instructor</h3>
+                <span class="timeline-org">Space Innovation Camp</span>
+              </div>
+              <span class="timeline-period">2025 &ndash; 2026</span>
+            </div>
+            <p class="timeline-body">
+              Teaching robotics, embedded systems, prototyping, debugging, and project-based engineering through hands-on technical activities and student projects.
+            </p>
+          </article>
+
         </div>
+      </div>
     </div>
-</footer>
-</div>
+  </section>
 
-<!-- Bootstrap and jQuery scripts -->
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery.easing.1.3.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.waypoints.min.js"></script>
-<script src="js/main.js"></script>
+  <!-- International Achievements Section -->
+  <section id="awards" class="section-wrap">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+          Global Competition Track Record
+        </div>
+        <h2 class="section-title">International Honors &amp; Awards</h2>
+        <p class="section-desc">
+          Competitive achievements at the premier global university robotics competitions: University Rover Challenge (URC) in the USA and Anatolian Rover Challenge (ARC) in Turkey.
+        </p>
+      </div>
 
+      <!-- Timeline Chain Container (populated dynamically from data.json) -->
+      <div id="awards-timeline-chain" class="timeline-chain" role="list" aria-label="International Awards Timeline Chain">
+        <!-- Node 1: URC 2026 3rd Globally -->
+        <div class="chain-node is-major" role="listitem">
+          <div class="chain-marker" title="Global Top 3">
+            <svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-card">
+            <div class="chain-top">
+              <div class="chain-title-row">
+                <span class="chain-year">2026</span>
+                <h3 class="chain-rank">3rd Position Globally</h3>
+                <span class="badge badge-accent badge-pill">Global Top 3</span>
+              </div>
+            </div>
+            <p class="chain-competition">University Rover Challenge (URC) 2026 &bull; Organized by The Mars Society</p>
+            <p class="chain-desc">3rd Position Globally among 100+ global university rover teams at the Mars Desert Research Station.</p>
+            <div class="chain-meta">
+              <span>Co-Team Lead</span>
+              <span>&bull;</span>
+              <span>UIU Mars Rover Team</span>
+              <span>&bull;</span>
+              <span>Hanksville, Utah, USA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 2: URC 2026 Best Autonomous Navigation -->
+        <div class="chain-node" role="listitem">
+          <div class="chain-marker" title="Special Recognition">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-card">
+            <div class="chain-top">
+              <div class="chain-title-row">
+                <span class="chain-year">2026</span>
+                <h3 class="chain-rank">Best Autonomous Navigation System Recognition</h3>
+                <span class="badge badge-pill">Special Recognition</span>
+              </div>
+            </div>
+            <p class="chain-competition">University Rover Challenge (URC) 2026 &bull; Organized by The Mars Society</p>
+            <p class="chain-desc">Recognized for world-class autonomous navigation, custom GPS/IMU drivers, and multi-sensor fusion.</p>
+            <div class="chain-meta">
+              <span>Co-Team Lead</span>
+              <span>&bull;</span>
+              <span>UIU Mars Rover Team</span>
+              <span>&bull;</span>
+              <span>Hanksville, Utah, USA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 3: ARC 2025 3rd Globally & 1st in Asia -->
+        <div class="chain-node is-major" role="listitem">
+          <div class="chain-marker" title="#1 in Asia">
+            <svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-card">
+            <div class="chain-top">
+              <div class="chain-title-row">
+                <span class="chain-year">2025</span>
+                <h3 class="chain-rank">3rd Position Globally &amp; 1st Among Asian Teams</h3>
+                <span class="badge badge-accent badge-pill">#1 in Asia</span>
+              </div>
+            </div>
+            <p class="chain-competition">Anatolian Rover Challenge (ARC) 2025 &bull; Organized by Space Exploration Society (UKET)</p>
+            <p class="chain-desc">Secured 3rd place worldwide and 1st among all participating Asian university robotics teams.</p>
+            <div class="chain-meta">
+              <span>Software Team Senior Member</span>
+              <span>&bull;</span>
+              <span>UIU Mars Rover Team</span>
+              <span>&bull;</span>
+              <span>Ankara, Turkey</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 4: ARC 2025 Best Autonomous Navigation -->
+        <div class="chain-node" role="listitem">
+          <div class="chain-marker" title="Category Winner">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-card">
+            <div class="chain-top">
+              <div class="chain-title-row">
+                <span class="chain-year">2025</span>
+                <h3 class="chain-rank">Best Autonomous Navigation System Award</h3>
+                <span class="badge badge-pill">Category Winner</span>
+              </div>
+            </div>
+            <p class="chain-competition">Anatolian Rover Challenge (ARC) 2025 &bull; Organized by Space Exploration Society (UKET)</p>
+            <p class="chain-desc">Awarded top honors for the most robust autonomous navigation and obstacle avoidance system.</p>
+            <div class="chain-meta">
+              <span>Software Team Senior Member</span>
+              <span>&bull;</span>
+              <span>UIU Mars Rover Team</span>
+              <span>&bull;</span>
+              <span>Ankara, Turkey</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 5: URC 2024 5th Globally & 1st in Asia -->
+        <div class="chain-node is-major" role="listitem">
+          <div class="chain-marker" title="#1 in Asia">
+            <svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-card">
+            <div class="chain-top">
+              <div class="chain-title-row">
+                <span class="chain-year">2024</span>
+                <h3 class="chain-rank">5th Position Globally &amp; 1st Among Asian Teams</h3>
+                <span class="badge badge-accent badge-pill">#1 in Asia</span>
+              </div>
+            </div>
+            <p class="chain-competition">University Rover Challenge (URC) 2024 &bull; Organized by The Mars Society</p>
+            <p class="chain-desc">Ranked 5th in the world and 1st across Asia under software team leadership and system integration.</p>
+            <div class="chain-meta">
+              <span>Software Team Lead</span>
+              <span>&bull;</span>
+              <span>UIU Mars Rover Team</span>
+              <span>&bull;</span>
+              <span>Hanksville, Utah, USA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 6: ARC 2023 3rd Globally & 1st in Asia -->
+        <div class="chain-node is-major" role="listitem">
+          <div class="chain-marker" title="#1 in Asia">
+            <svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-card">
+            <div class="chain-top">
+              <div class="chain-title-row">
+                <span class="chain-year">2023</span>
+                <h3 class="chain-rank">3rd Position Globally &amp; 1st Among Asian Teams</h3>
+                <span class="badge badge-accent badge-pill">#1 in Asia</span>
+              </div>
+            </div>
+            <p class="chain-competition">Anatolian Rover Challenge (ARC) 2023 &bull; Organized by Space Exploration Society (UKET)</p>
+            <p class="chain-desc">Bronze podium finish globally and continental leadership across Asian university rover contenders.</p>
+            <div class="chain-meta">
+              <span>Software Team Member</span>
+              <span>&bull;</span>
+              <span>UIU Mars Rover Team</span>
+              <span>&bull;</span>
+              <span>Ankara, Turkey</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 7: URC 2023 9th Globally & 1st in Asia -->
+        <div class="chain-node" role="listitem">
+          <div class="chain-marker" title="#1 in Asia">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-card">
+            <div class="chain-top">
+              <div class="chain-title-row">
+                <span class="chain-year">2023</span>
+                <h3 class="chain-rank">9th Position Globally &amp; 1st Among Asian Teams</h3>
+                <span class="badge badge-accent badge-pill">#1 in Asia</span>
+              </div>
+            </div>
+            <p class="chain-competition">University Rover Challenge (URC) 2023 &bull; Organized by The Mars Society</p>
+            <p class="chain-desc">Global top 10 finish and 1st in Asia during inaugural international competition deployment.</p>
+            <div class="chain-meta">
+              <span>Software Team Member</span>
+              <span>&bull;</span>
+              <span>UIU Mars Rover Team</span>
+              <span>&bull;</span>
+              <span>Hanksville, Utah, USA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Research Experience Section -->
+  <section id="research" class="section-wrap">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Academic &amp; Applied Investigations
+        </div>
+        <h2 class="section-title">Research Experience</h2>
+        <p class="section-desc">
+          Research initiatives in smart infrastructure resilience, water and sanitation policies, and campus-wide energy telemetry.
+        </p>
+      </div>
+
+      <div class="research-grid">
+        <!-- Project 1: CSIRS -->
+        <article class="research-card">
+          <div class="research-card-top">
+            <div class="research-badge-row">
+              <span class="badge badge-accent badge-pill">Funded Research</span>
+              <span class="badge badge-outline">CSIRS &bull; UIU</span>
+            </div>
+            <div>
+              <h3 class="research-title">National Strategy for Water &amp; Sanitation in Hard-to-Reach Areas</h3>
+              <p class="research-org">Center for Smart Infrastructure Resilience and Sustainability (CSIRS), UIU</p>
+            </div>
+            <p class="research-body">
+              Working on the project <em>Revise and Update the National Strategy for Water and Sanitation in Hard-to-Reach Areas of Bangladesh 2012</em>. Contributing to research activities and hardware-software oriented project development.
+            </p>
+          </div>
+          <div>
+            <span class="badge">Part-time Research Assistant</span>
+          </div>
+        </article>
+
+        <!-- Project 2: IAR IoT Campus Project -->
+        <article class="research-card">
+          <div class="research-card-top">
+            <div class="research-badge-row">
+              <span class="badge badge-accent badge-pill">IAR-Funded</span>
+              <span class="badge badge-outline">2025 &ndash; 2026</span>
+            </div>
+            <div>
+              <h3 class="research-title">IoT Campus: Smart Campus Distributed Data &amp; Electricity Optimization</h3>
+              <p class="research-org">Institute for Advanced Research (IAR) Funded Project</p>
+            </div>
+            <p class="research-body">
+              Worked on <em>IoT Campus</em>, a smart campus platform for distributed IoT data collection, real-time monitoring, data pipelines, and analytics-ready integration. Contributed to sensor-based system development, hardware planning, and hardware-software integration.
+            </p>
+          </div>
+          <div>
+            <span class="badge">Part-timeResearch Assistant</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+<!-- Technical Expertise Section -->
+  <section id="expertise" class="section-wrap">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          Core Capabilities
+        </div>
+        <h2 class="section-title">Technical Expertise</h2>
+
+      </div>
+
+      <div class="expertise-grid">
+        <!-- Pillar 1: Robotics & Autonomous Systems -->
+        <div class="expertise-card">
+          <div class="expertise-icon-box">
+            <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </div>
+          <div>
+            <h3 class="expertise-title">Robotics &amp; Autonomous Systems</h3>
+            <p class="expertise-desc">
+              Autonomous planetary rovers and mobile platforms with real-time navigation, perception, and state estimation.
+            </p>
+          </div>
+          <div class="expertise-tags">
+            <span class="expertise-chip">ROS2</span>
+            <span class="expertise-chip">Autonomous Navigation</span>
+            <span class="expertise-chip">Sensor Fusion</span>
+            <span class="expertise-chip">Path Planning</span>
+            <span class="expertise-chip">Computer Vision</span>
+            <span class="expertise-chip">Robotic Manipulation</span>
+            <span class="expertise-chip">Robot System Integration</span>
+          </div>
+        </div>
+
+        <!-- Pillar 2: Embedded Systems & Hardware -->
+        <div class="expertise-card">
+          <div class="expertise-icon-box">
+            <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+          </div>
+          <div>
+            <h3 class="expertise-title">Embedded Systems &amp; Hardware</h3>
+            <p class="expertise-desc">
+              Hardware circuit engineering, low-level microcontroller firmware, and custom drivers for NVIDIA embedded architectures.
+            </p>
+          </div>
+          <div class="expertise-tags">
+            <span class="expertise-chip">Hardware Circuit Design</span>
+            <span class="expertise-chip">Embedded Firmware</span>
+            <span class="expertise-chip">Microcontrollers</span>
+            <span class="expertise-chip">Embedded Linux</span>
+            <span class="expertise-chip">Sensor Interfacing</span>
+            <span class="expertise-chip">GPS &amp; IMU Drivers</span>
+            <span class="expertise-chip">HW-SW Integration</span>
+          </div>
+        </div>
+
+        <!-- Pillar 3: IoT & Connected Systems -->
+        <div class="expertise-card">
+          <div class="expertise-icon-box">
+            <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+          </div>
+          <div>
+            <h3 class="expertise-title">IoT &amp; Connected Systems</h3>
+            <p class="expertise-desc">
+              Distributed device networks, real-time telemetry streaming, smart campus platforms, and edge-to-cloud pipelines.
+            </p>
+          </div>
+          <div class="expertise-tags">
+            <span class="expertise-chip">IoT Architecture</span>
+            <span class="expertise-chip">Connected Devices</span>
+            <span class="expertise-chip">Real-Time Monitoring</span>
+            <span class="expertise-chip">Device Communication</span>
+            <span class="expertise-chip">Distributed IoT Systems</span>
+            <span class="expertise-chip">Sensor Monitoring</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Developer Tools Spotlight Section -->
+  <section class="section-wrap">
+    <div class="container">
+      <div class="tools-spotlight">
+        <div class="tools-spotlight-content">
+          <div class="badge-group" style="display: flex; gap: 0.5rem; align-items: center;">
+            <span class="badge badge-accent">Featured Directory</span>
+            <span class="badge badge-outline">Interactive Utilities</span>
+          </div>
+          <h3 class="tools-spotlight-title">Developer &amp; Web Tools Directory</h3>
+          <p class="tools-spotlight-desc">
+            Explore dedicated, client-side productivity utilities designed with a matching minimal black and white aesthetic — including the Bulk Gmail &amp; Domain Filter CSV tool.
+          </p>
+        </div>
+        <div>
+          <a href="tools/index.html" class="btn btn-primary btn-lg">
+            <span>Explore Tools Directory</span>
+            <svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          &copy; <span id="current-year">2026</span> Sheikh Shakib Hossain. All rights reserved.
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/sheikhshakibhossain" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+          <a href="https://www.linkedin.com/in/sheikhshakibhossa1n" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
+          <a href="https://x.com/SheikhShak1b" target="_blank" rel="noopener noreferrer" class="footer-link">X (Twitter)</a>
+          <a href="https://wa.me/SheikhShakibHossa1n" target="_blank" rel="noopener noreferrer" class="footer-link">WhatsApp</a>
+          <a href="tools/index.html" class="footer-link">Tools</a>
+          <a href="Shakib_CV.pdf" class="footer-link" download>CV</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Copied to clipboard</div>
+
+  <!-- JavaScript for Theme & Interactions -->
+  <script>
+    // Set dynamic current year in footer
+    const yearSpan = document.getElementById('current-year');
+    if (yearSpan) {
+      yearSpan.textContent = new Date().getFullYear();
+    }
+
+    // Theme toggle implementation aligned with tools/index.html
+    const themeBtn = document.getElementById('theme-btn');
+    const iconLight = document.getElementById('theme-icon-light');
+    const iconDark = document.getElementById('theme-icon-dark');
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        if (iconLight && iconDark) {
+          iconLight.style.display = 'none';
+          iconDark.style.display = 'block';
+        }
+      } else {
+        document.documentElement.classList.remove('dark');
+        if (iconLight && iconDark) {
+          iconLight.style.display = 'block';
+          iconDark.style.display = 'none';
+        }
+      }
+    }
+
+    // Initialize toggle button state based on current class
+    const isCurrentlyDark = document.documentElement.classList.contains('dark');
+    applyTheme(isCurrentlyDark);
+
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        const nextTheme = !isDark;
+        applyTheme(nextTheme);
+        localStorage.setItem('theme-mode', nextTheme ? 'dark' : 'light');
+      });
+    }
+
+    // Listen to system color scheme changes if user hasn't explicitly set a preference
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme-mode')) {
+        applyTheme(e.matches);
+      }
+    });
+
+    // Mobile navigation drawer toggle
+    const mobileToggle = document.getElementById('mobile-menu-toggle');
+    const mobilePanel = document.getElementById('mobile-nav-panel');
+
+    if (mobileToggle && mobilePanel) {
+      mobileToggle.addEventListener('click', () => {
+        mobilePanel.classList.toggle('open');
+      });
+
+      // Close mobile drawer when clicking any link inside it
+      mobilePanel.querySelectorAll('.mobile-link').forEach((link) => {
+        link.addEventListener('click', () => {
+          mobilePanel.classList.remove('open');
+        });
+      });
+    }
+
+    // Dynamic Data Loader from data.json
+    function escapeHtml(str) {
+      if (typeof str !== 'string') return str;
+      return str.replace(/[&<>'"]/g, (tag) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag));
+    }
+
+    function applyDynamicMetrics(metrics) {
+      if (!metrics || typeof metrics !== 'object') return;
+      document.querySelectorAll('[data-metric]').forEach((el) => {
+        const key = el.getAttribute('data-metric');
+        if (metrics[key] !== undefined && metrics[key] !== null) {
+          el.textContent = metrics[key];
+        }
+      });
+    }
+
+    function renderAwardsTimeline(awards) {
+      const container = document.getElementById('awards-timeline-chain');
+      if (!container || !Array.isArray(awards) || awards.length === 0) return;
+
+      container.innerHTML = awards.map((award) => {
+        const isMajor = award.isMajor || (award.rank && (award.rank.includes('3rd') || award.rank.includes('5th')));
+        const markerIcon = isMajor
+          ? `<svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`
+          : `<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>`;
+
+        const badgeHtml = award.badge
+          ? `<span class="badge ${isMajor ? 'badge-accent' : ''} badge-pill">${escapeHtml(award.badge)}</span>`
+          : '';
+
+        const descHtml = award.description
+          ? `<p class="chain-desc">${escapeHtml(award.description)}</p>`
+          : '';
+
+        return `
+          <div class="chain-node ${isMajor ? 'is-major' : ''}" role="listitem">
+            <div class="chain-marker" title="${escapeHtml(award.badge || award.rank)}">
+              ${markerIcon}
+            </div>
+            <div class="chain-connector"></div>
+            <div class="chain-card">
+              <div class="chain-top">
+                <div class="chain-title-row">
+                  <span class="chain-year">${escapeHtml(award.year)}</span>
+                  <h3 class="chain-rank">${escapeHtml(award.rank)}</h3>
+                  ${badgeHtml}
+                </div>
+              </div>
+              <p class="chain-competition">${escapeHtml(award.competition)} &bull; ${escapeHtml(award.organizer)}</p>
+              ${descHtml}
+              <div class="chain-meta">
+                <span>${escapeHtml(award.role)}</span>
+                <span>&bull;</span>
+                <span>${escapeHtml(award.team)}</span>
+                <span>&bull;</span>
+                <span>${escapeHtml(award.location)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadPortfolioData() {
+      try {
+        const response = await fetch('data.json?v=' + Date.now());
+        if (!response.ok) throw new Error('data.json response was not ok');
+        const data = await response.json();
+        if (data.metrics) applyDynamicMetrics(data.metrics);
+        if (data.awards) renderAwardsTimeline(data.awards);
+      } catch (err) {
+        console.info('data.json running with initial fallback values:', err);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadPortfolioData);
+    } else {
+      loadPortfolioData();
+    }
+  </script>
 </body>
 </html>
