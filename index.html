@@ -6,6 +6,7 @@
   <title>Sheikh Shakib Hossain | Lecturer, Dept. of CSE, UIU &amp; Robotics Engineer</title>
   <meta name="description" content="Portfolio of Sheikh Shakib Hossain — Lecturer, Department of CSE, United International University (UIU). Robotics, Embedded Systems &amp; Autonomous Systems engineer and researcher. Co-Team Lead of UIU Mars Rover Team.">
   <meta name="author" content="Sheikh Shakib Hossain">
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <meta name="keywords" content="Sheikh Shakib Hossain, Lecturer CSE UIU, Robotics Engineer, Embedded Systems, Autonomous Systems, ROS2, Mars Rover, UIU, Computer Vision, IoT, Sensor Fusion">
 
   <!-- OpenGraph / Social Media -->
@@ -1263,88 +1264,11 @@
       background: var(--muted);
     }
 
-    .cv-modal-body iframe,
     .cv-modal-body embed {
       display: block;
       width: 100%;
       height: 100%;
       border: none;
-    }
-
-    /* Custom PDF viewer (PDF.js canvas) */
-    .cv-viewer {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      background: var(--muted);
-    }
-
-    .cv-viewer-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.5rem 0.75rem;
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-
-    .cv-toolbar-spacer {
-      flex: 1;
-    }
-
-    .cv-page-indicator {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--muted-foreground);
-      min-width: 3.5rem;
-      text-align: center;
-      user-select: none;
-    }
-
-    .cv-viewer-scroll {
-      flex: 1;
-      overflow: auto;
-      padding: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
-
-    .cv-viewer-scroll canvas {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-md);
-    }
-
-    .cv-viewer-loading,
-    .cv-viewer-error {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      background: var(--muted);
-      color: var(--muted-foreground);
-      font-size: 0.85rem;
-      font-family: var(--font-mono);
-      z-index: 2;
-    }
-
-    .cv-viewer-error {
-      color: var(--foreground);
-      font-family: var(--font-sans);
-    }
-
-    .cv-viewer-loading[hidden],
-    .cv-viewer-error[hidden] {
-      display: none;
     }
 
     .cv-modal-footer {
@@ -2109,33 +2033,7 @@
         </button>
       </div>
       <div class="cv-modal-body">
-        <div class="cv-viewer">
-          <div class="cv-viewer-toolbar">
-            <button type="button" class="btn btn-outline btn-icon-only btn-sm" id="cv-prev" aria-label="Previous page" title="Previous page">
-              <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </button>
-            <span class="cv-page-indicator"><span id="cv-page-current">1</span> / <span id="cv-page-total">-</span></span>
-            <button type="button" class="btn btn-outline btn-icon-only btn-sm" id="cv-next" aria-label="Next page" title="Next page">
-              <svg class="icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-            <span class="cv-toolbar-spacer"></span>
-            <button type="button" class="btn btn-outline btn-icon-only btn-sm" id="cv-zoom-out" aria-label="Zoom out" title="Zoom out">
-              <svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            </button>
-            <span class="cv-page-indicator" id="cv-zoom-label">100%</span>
-            <button type="button" class="btn btn-outline btn-icon-only btn-sm" id="cv-zoom-in" aria-label="Zoom in" title="Zoom in">
-              <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            </button>
-          </div>
-          <div class="cv-viewer-scroll" id="cv-canvas-wrap">
-            <canvas id="cv-canvas"></canvas>
-          </div>
-          <div class="cv-viewer-loading" id="cv-loading">Loading CV…</div>
-          <div class="cv-viewer-error" id="cv-error" hidden>
-            <p>Could not render the CV preview.</p>
-            <a href="Shakib_CV.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Open CV in new tab</a>
-          </div>
-        </div>
+        <embed id="cv-frame" src="Shakib_CV.pdf#toolbar=0&amp;navpanes=0&amp;view=FitH" type="application/pdf" title="CV preview">
       </div>
       <div class="cv-modal-footer">
         <button type="button" class="btn btn-outline btn-sm" data-cv-close>Close</button>
@@ -2213,96 +2111,27 @@
       });
     }
 
-    // CV Preview Modal (custom PDF.js viewer — no browser PDF chrome)
+    // CV Preview Modal
     const cvModal = document.getElementById('cv-modal');
-    const cvCanvas = document.getElementById('cv-canvas');
-    const cvLoading = document.getElementById('cv-loading');
-    const cvError = document.getElementById('cv-error');
-    const cvPageCurrent = document.getElementById('cv-page-current');
-    const cvPageTotal = document.getElementById('cv-page-total');
-    const cvZoomLabel = document.getElementById('cv-zoom-label');
-    const CV_SRC = 'Shakib_CV.pdf';
+    const cvFrame = document.getElementById('cv-frame');
+    const CV_SRC = 'Shakib_CV.pdf#toolbar=0&navpanes=0&view=FitH';
 
-    if (cvModal && cvCanvas) {
+    if (cvModal && cvFrame) {
       let lastFocused = null;
-      let pdfDoc = null;
-      let currentPage = 1;
-      let zoom = 1;
-      let renderTask = null;
 
       const cvFocusables = () => Array.from(
         cvModal.querySelectorAll('button, a[href]')
       ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
 
-      async function renderPage() {
-        if (!pdfDoc) return;
-        const page = await pdfDoc.getPage(currentPage);
-        const viewport = page.getViewport({ scale: zoom });
-
-        const canvas = cvCanvas;
-        const context = canvas.getContext('2d');
-        const ratio = window.devicePixelRatio || 1;
-
-        canvas.width = Math.floor(viewport.width * ratio);
-        canvas.height = Math.floor(viewport.height * ratio);
-        canvas.style.width = Math.floor(viewport.width) + 'px';
-        canvas.style.height = Math.floor(viewport.height) + 'px';
-
-        if (renderTask) {
-          try { renderTask.cancel(); } catch (err) { /* already finished */ }
-        }
-
-        renderTask = page.render({
-          canvasContext: context,
-          viewport,
-          transform: ratio !== 1 ? [ratio, 0, 0, ratio, 0, 0] : null
-        });
-
-        try {
-          await renderTask.promise;
-        } catch (err) {
-          if (err && err.name !== 'RenderingCancelledException') console.warn('CV page render failed:', err);
-        }
-
-        cvPageCurrent.textContent = String(currentPage);
-        cvZoomLabel.textContent = Math.round(zoom * 100) + '%';
-      }
-
-      async function loadCvPdf() {
-        cvLoading.hidden = false;
-        cvError.hidden = true;
-        try {
-          const pdfjs = await import('./js/vendor/pdf.min.mjs');
-          pdfjs.GlobalWorkerOptions.workerSrc = './js/vendor/pdf.worker.min.mjs';
-
-          if (pdfDoc) {
-            await pdfDoc.destroy();
-            pdfDoc = null;
-          }
-
-          pdfDoc = await pdfjs.getDocument(CV_SRC).promise;
-          cvPageTotal.textContent = String(pdfDoc.numPages);
-          currentPage = 1;
-          zoom = 1;
-          await renderPage();
-          cvLoading.hidden = true;
-        } catch (err) {
-          console.error('CV preview failed to load:', err);
-          cvLoading.hidden = true;
-          cvError.hidden = false;
-        }
-      }
-
       function openCvModal() {
         lastFocused = document.activeElement;
+        // Re-assign the source on every open so the PDF always renders
+        cvFrame.setAttribute('src', CV_SRC);
         cvModal.removeAttribute('hidden');
         cvModal.classList.add('open');
         document.body.style.overflow = 'hidden';
         const closeBtn = cvModal.querySelector('.cv-modal-close');
         if (closeBtn) closeBtn.focus();
-
-        if (!pdfDoc) loadCvPdf();
-        else renderPage();
       }
 
       function closeCvModal() {
@@ -2318,26 +2147,6 @@
 
       cvModal.querySelectorAll('[data-cv-close], .cv-modal-close').forEach((btn) => {
         btn.addEventListener('click', closeCvModal);
-      });
-
-      // Page navigation
-      document.getElementById('cv-prev').addEventListener('click', () => {
-        if (currentPage > 1) { currentPage--; renderPage(); }
-      });
-
-      document.getElementById('cv-next').addEventListener('click', () => {
-        if (pdfDoc && currentPage < pdfDoc.numPages) { currentPage++; renderPage(); }
-      });
-
-      // Zoom controls
-      document.getElementById('cv-zoom-in').addEventListener('click', () => {
-        zoom = Math.min(zoom + 0.25, 3);
-        renderPage();
-      });
-
-      document.getElementById('cv-zoom-out').addEventListener('click', () => {
-        zoom = Math.max(zoom - 0.25, 0.5);
-        renderPage();
       });
 
       // Clicking the backdrop (outside the panel) closes the modal
@@ -2442,6 +2251,10 @@
     }
 
     async function loadPortfolioData() {
+      // fetch() is blocked by the browser on file:// origins, so the page
+      // relies on the values already present in the markup.
+      if (window.location.protocol === 'file:') return;
+
       try {
         const response = await fetch('data.json?v=' + Date.now());
         if (!response.ok) throw new Error('data.json response was not ok');
