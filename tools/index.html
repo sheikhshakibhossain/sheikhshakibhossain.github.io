@@ -7,6 +7,19 @@
   <meta name="description" content="Directory of developer utilities and web tools built by Sheikh Shakib Hossain.">
   <meta name="author" content="Sheikh Shakib Hossain">
 
+  <script>
+    // Early theme script to prevent FOUC (Flash of Unstyled Content)
+    (function () {
+      const savedTheme = localStorage.getItem('theme-mode');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
   <!-- Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -525,6 +538,13 @@
       const isDark = document.documentElement.classList.contains('dark');
       applyTheme(!isDark);
       localStorage.setItem('theme-mode', !isDark ? 'dark' : 'light');
+    });
+
+    // Follow system color scheme changes if the user hasn't set a preference
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme-mode')) {
+        applyTheme(e.matches);
+      }
     });
 
     // Search filter

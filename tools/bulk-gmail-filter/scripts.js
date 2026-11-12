@@ -105,6 +105,13 @@
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
     applyTheme(isDark);
+
+    // Follow system color scheme changes if the user hasn't set a preference
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme-mode')) {
+        applyTheme(e.matches);
+      }
+    });
   }
 
   function applyTheme(isDark) {

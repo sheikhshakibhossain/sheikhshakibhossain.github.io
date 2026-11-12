@@ -8,6 +8,19 @@
   <meta name="keywords" content="email filter, csv email extractor, domain filter, gmail filter, bscse uiu, email list cleaner">
   <meta name="author" content="Sheikh Shakib Hossain">
 
+  <script>
+    // Early theme script to prevent FOUC (Flash of Unstyled Content)
+    (function () {
+      const savedTheme = localStorage.getItem('theme-mode');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
   <!-- Inter Font from system / Google CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

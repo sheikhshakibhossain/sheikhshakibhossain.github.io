@@ -1208,6 +1208,202 @@
       color: var(--foreground);
     }
 
+    /* CV Preview Modal */
+    .cv-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      background: rgba(9, 9, 11, 0.6);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+    }
+
+    .cv-modal.open {
+      display: flex;
+      animation: cv-fade-in 0.2s ease;
+    }
+
+    .cv-modal-panel {
+      display: flex;
+      flex-direction: column;
+      width: min(1000px, 100%);
+      height: min(90vh, 900px);
+      background: var(--card);
+      color: var(--card-foreground);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      animation: cv-scale-in 0.2s ease;
+    }
+
+    .cv-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .cv-modal-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .cv-modal-body {
+      flex: 1;
+      overflow: hidden;
+      background: var(--muted);
+    }
+
+    .cv-modal-body iframe,
+    .cv-modal-body embed {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Custom PDF viewer (PDF.js canvas) */
+    .cv-viewer {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--muted);
+    }
+
+    .cv-viewer-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .cv-toolbar-spacer {
+      flex: 1;
+    }
+
+    .cv-page-indicator {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+      min-width: 3.5rem;
+      text-align: center;
+      user-select: none;
+    }
+
+    .cv-viewer-scroll {
+      flex: 1;
+      overflow: auto;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .cv-viewer-scroll canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+    }
+
+    .cv-viewer-loading,
+    .cv-viewer-error {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: var(--muted);
+      color: var(--muted-foreground);
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+      z-index: 2;
+    }
+
+    .cv-viewer-error {
+      color: var(--foreground);
+      font-family: var(--font-sans);
+    }
+
+    .cv-viewer-loading[hidden],
+    .cv-viewer-error[hidden] {
+      display: none;
+    }
+
+    .cv-modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Anchor-styled CV triggers rendered as buttons */
+    .cv-trigger {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    @keyframes cv-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes cv-scale-in {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 640px) {
+      .cv-modal {
+        padding: 0;
+      }
+
+      .cv-modal-panel {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        border: none;
+      }
+
+      .cv-modal-header,
+      .cv-modal-footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cv-modal.open,
+      .cv-modal-panel {
+        animation: none;
+      }
+    }
+
     /* Copy Feedback Toast */
     .toast {
       position: fixed;
@@ -1263,10 +1459,10 @@
             Tools
           </a>
 
-          <a href="Shakib_CV.pdf" class="btn btn-primary btn-sm" download title="Download CV">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <button type="button" class="btn btn-primary btn-sm" data-cv-open title="View CV">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="13" y2="17"></line></svg>
             CV
-          </a>
+          </button>
 
           <!-- Theme Toggle Button -->
           <button id="theme-btn" class="btn btn-outline btn-icon-only btn-sm" aria-label="Toggle theme" title="Toggle theme">
@@ -1292,7 +1488,7 @@
       <a href="#experience" class="nav-link mobile-link">Experience</a>
       <a href="#research" class="nav-link mobile-link">Research</a>
       <a href="tools/index.html" class="nav-link mobile-link">Tools &amp; Utilities</a>
-      <a href="Shakib_CV.pdf" class="nav-link mobile-link" download>Download CV (PDF)</a>
+      <button type="button" class="nav-link mobile-link cv-trigger" data-cv-open>View CV (PDF)</button>
     </div>
   </nav>
 
@@ -1320,10 +1516,10 @@
           </p>
 
           <div class="hero-actions-compact">
-            <a href="Shakib_CV.pdf" class="btn btn-primary btn-sm" download title="Download CV (PDF)">
-              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Download CV
-            </a>
+            <button type="button" class="btn btn-primary btn-sm" data-cv-open title="View CV (PDF)">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="13" y2="17"></line></svg>
+              View CV
+            </button>
             <a href="tools/index.html" class="btn btn-outline btn-sm" title="Explore Developer Tools Directory">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
               Tools Directory
@@ -1894,7 +2090,7 @@
           <a href="https://x.com/SheikhShak1b" target="_blank" rel="noopener noreferrer" class="footer-link">X (Twitter)</a>
           <a href="https://wa.me/SheikhShakibHossa1n" target="_blank" rel="noopener noreferrer" class="footer-link">WhatsApp</a>
           <a href="tools/index.html" class="footer-link">Tools</a>
-          <a href="Shakib_CV.pdf" class="footer-link" download>CV</a>
+          <button type="button" class="footer-link cv-trigger" data-cv-open>CV</button>
         </div>
       </div>
     </div>
@@ -1902,6 +2098,54 @@
 
   <!-- Toast Notification -->
   <div id="toast" class="toast">Copied to clipboard</div>
+
+  <!-- CV Preview Modal -->
+  <div id="cv-modal" class="cv-modal" role="dialog" aria-modal="true" aria-labelledby="cv-modal-title" hidden>
+    <div class="cv-modal-panel">
+      <div class="cv-modal-header">
+        <h2 id="cv-modal-title" class="cv-modal-title">Curriculum Vitae</h2>
+        <button type="button" class="btn btn-outline btn-icon-only btn-sm cv-modal-close" aria-label="Close CV preview">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="cv-modal-body">
+        <div class="cv-viewer">
+          <div class="cv-viewer-toolbar">
+            <button type="button" class="btn btn-outline btn-icon-only btn-sm" id="cv-prev" aria-label="Previous page" title="Previous page">
+              <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <span class="cv-page-indicator"><span id="cv-page-current">1</span> / <span id="cv-page-total">-</span></span>
+            <button type="button" class="btn btn-outline btn-icon-only btn-sm" id="cv-next" aria-label="Next page" title="Next page">
+              <svg class="icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <span class="cv-toolbar-spacer"></span>
+            <button type="button" class="btn btn-outline btn-icon-only btn-sm" id="cv-zoom-out" aria-label="Zoom out" title="Zoom out">
+              <svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <span class="cv-page-indicator" id="cv-zoom-label">100%</span>
+            <button type="button" class="btn btn-outline btn-icon-only btn-sm" id="cv-zoom-in" aria-label="Zoom in" title="Zoom in">
+              <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+          </div>
+          <div class="cv-viewer-scroll" id="cv-canvas-wrap">
+            <canvas id="cv-canvas"></canvas>
+          </div>
+          <div class="cv-viewer-loading" id="cv-loading">Loading CV…</div>
+          <div class="cv-viewer-error" id="cv-error" hidden>
+            <p>Could not render the CV preview.</p>
+            <a href="Shakib_CV.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Open CV in new tab</a>
+          </div>
+        </div>
+      </div>
+      <div class="cv-modal-footer">
+        <button type="button" class="btn btn-outline btn-sm" data-cv-close>Close</button>
+        <a href="Shakib_CV.pdf" class="btn btn-primary btn-sm" download>
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- JavaScript for Theme & Interactions -->
   <script>
@@ -1966,6 +2210,165 @@
         link.addEventListener('click', () => {
           mobilePanel.classList.remove('open');
         });
+      });
+    }
+
+    // CV Preview Modal (custom PDF.js viewer — no browser PDF chrome)
+    const cvModal = document.getElementById('cv-modal');
+    const cvCanvas = document.getElementById('cv-canvas');
+    const cvLoading = document.getElementById('cv-loading');
+    const cvError = document.getElementById('cv-error');
+    const cvPageCurrent = document.getElementById('cv-page-current');
+    const cvPageTotal = document.getElementById('cv-page-total');
+    const cvZoomLabel = document.getElementById('cv-zoom-label');
+    const CV_SRC = 'Shakib_CV.pdf';
+
+    if (cvModal && cvCanvas) {
+      let lastFocused = null;
+      let pdfDoc = null;
+      let currentPage = 1;
+      let zoom = 1;
+      let renderTask = null;
+
+      const cvFocusables = () => Array.from(
+        cvModal.querySelectorAll('button, a[href]')
+      ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+
+      async function renderPage() {
+        if (!pdfDoc) return;
+        const page = await pdfDoc.getPage(currentPage);
+        const viewport = page.getViewport({ scale: zoom });
+
+        const canvas = cvCanvas;
+        const context = canvas.getContext('2d');
+        const ratio = window.devicePixelRatio || 1;
+
+        canvas.width = Math.floor(viewport.width * ratio);
+        canvas.height = Math.floor(viewport.height * ratio);
+        canvas.style.width = Math.floor(viewport.width) + 'px';
+        canvas.style.height = Math.floor(viewport.height) + 'px';
+
+        if (renderTask) {
+          try { renderTask.cancel(); } catch (err) { /* already finished */ }
+        }
+
+        renderTask = page.render({
+          canvasContext: context,
+          viewport,
+          transform: ratio !== 1 ? [ratio, 0, 0, ratio, 0, 0] : null
+        });
+
+        try {
+          await renderTask.promise;
+        } catch (err) {
+          if (err && err.name !== 'RenderingCancelledException') console.warn('CV page render failed:', err);
+        }
+
+        cvPageCurrent.textContent = String(currentPage);
+        cvZoomLabel.textContent = Math.round(zoom * 100) + '%';
+      }
+
+      async function loadCvPdf() {
+        cvLoading.hidden = false;
+        cvError.hidden = true;
+        try {
+          const pdfjs = await import('./js/vendor/pdf.min.mjs');
+          pdfjs.GlobalWorkerOptions.workerSrc = './js/vendor/pdf.worker.min.mjs';
+
+          if (pdfDoc) {
+            await pdfDoc.destroy();
+            pdfDoc = null;
+          }
+
+          pdfDoc = await pdfjs.getDocument(CV_SRC).promise;
+          cvPageTotal.textContent = String(pdfDoc.numPages);
+          currentPage = 1;
+          zoom = 1;
+          await renderPage();
+          cvLoading.hidden = true;
+        } catch (err) {
+          console.error('CV preview failed to load:', err);
+          cvLoading.hidden = true;
+          cvError.hidden = false;
+        }
+      }
+
+      function openCvModal() {
+        lastFocused = document.activeElement;
+        cvModal.removeAttribute('hidden');
+        cvModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        const closeBtn = cvModal.querySelector('.cv-modal-close');
+        if (closeBtn) closeBtn.focus();
+
+        if (!pdfDoc) loadCvPdf();
+        else renderPage();
+      }
+
+      function closeCvModal() {
+        cvModal.classList.remove('open');
+        cvModal.setAttribute('hidden', '');
+        document.body.style.overflow = '';
+        if (lastFocused) lastFocused.focus();
+      }
+
+      document.querySelectorAll('[data-cv-open]').forEach((trigger) => {
+        trigger.addEventListener('click', openCvModal);
+      });
+
+      cvModal.querySelectorAll('[data-cv-close], .cv-modal-close').forEach((btn) => {
+        btn.addEventListener('click', closeCvModal);
+      });
+
+      // Page navigation
+      document.getElementById('cv-prev').addEventListener('click', () => {
+        if (currentPage > 1) { currentPage--; renderPage(); }
+      });
+
+      document.getElementById('cv-next').addEventListener('click', () => {
+        if (pdfDoc && currentPage < pdfDoc.numPages) { currentPage++; renderPage(); }
+      });
+
+      // Zoom controls
+      document.getElementById('cv-zoom-in').addEventListener('click', () => {
+        zoom = Math.min(zoom + 0.25, 3);
+        renderPage();
+      });
+
+      document.getElementById('cv-zoom-out').addEventListener('click', () => {
+        zoom = Math.max(zoom - 0.25, 0.5);
+        renderPage();
+      });
+
+      // Clicking the backdrop (outside the panel) closes the modal
+      cvModal.addEventListener('click', (e) => {
+        if (e.target === cvModal) closeCvModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (!cvModal.classList.contains('open')) return;
+
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeCvModal();
+          return;
+        }
+
+        // Trap focus inside the modal
+        if (e.key === 'Tab') {
+          const focusables = cvFocusables();
+          if (focusables.length === 0) return;
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       });
     }
 
