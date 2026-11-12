@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator | Tools | Sheikh Shakib Hossain</title>
+  <meta name="description" content="Generate QR codes for URLs, WiFi, contacts, payments (bKash, Nagad, Rocket, Bank), WhatsApp, email, SMS, and more. Free, client-side, no data sent anywhere.">
+  <meta name="author" content="Sheikh Shakib Hossain">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Design Tokens (shadcn/ui monochrome) ── */
+    :root {
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --background: #ffffff; --foreground: #09090b;
+      --card: #ffffff;       --card-foreground: #09090b;
+      --primary: #18181b;    --primary-foreground: #fafafa;
+      --secondary: #f4f4f5;  --secondary-foreground: #18181b;
+      --muted: #f4f4f5;      --muted-foreground: #71717a;
+      --accent: #f4f4f5;     --accent-foreground: #18181b;
+      --border: #e4e4e7;     --input: #e4e4e7;
+      --input-focus: #09090b; --ring: #18181b;
+      --radius: 0.5rem;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+      --shadow: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px -1px rgba(0,0,0,.1);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,.08), 0 2px 4px -2px rgba(0,0,0,.06);
+      --tag-bg: #f4f4f5; --tag-border: #e4e4e7;
+    }
+    .dark {
+      --background: #09090b; --foreground: #fafafa;
+      --card: #09090b;       --card-foreground: #fafafa;
+      --primary: #fafafa;    --primary-foreground: #18181b;
+      --secondary: #27272a;  --secondary-foreground: #fafafa;
+      --muted: #27272a;      --muted-foreground: #a1a1aa;
+      --accent: #27272a;     --accent-foreground: #fafafa;
+      --border: #27272a;     --input: #27272a;
+      --input-focus: #fafafa; --ring: #d4d4d8;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.5);
+      --shadow: 0 1px 3px rgba(0,0,0,.5);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,.5);
+      --tag-bg: #18181b; --tag-border: #27272a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .2s ease, color .2s ease;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--background); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.25rem; }
+    @media (min-width: 768px) { .container { padding: 0 2rem; } }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: .4rem; font-family: var(--font-sans); font-size: .85rem;
+      font-weight: 500; height: 2.25rem; padding: 0 .9rem;
+      border-radius: var(--radius); cursor: pointer;
+      border: 1px solid transparent; transition: all .15s ease;
+      outline: none; white-space: nowrap; background: none;
+    }
+    .btn:focus-visible { box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring); }
+    .btn-sm  { height: 2rem; padding: 0 .7rem; font-size: .8rem; }
+    .btn-xs  { height: 1.75rem; padding: 0 .6rem; font-size: .75rem; }
+    .btn-primary   { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+    .btn-primary:hover { opacity: .88; }
+    .btn-outline   { background: transparent; color: var(--foreground); border-color: var(--border); }
+    .btn-outline:hover { border-color: var(--foreground); background: var(--accent); }
+    .btn-ghost     { background: transparent; color: var(--muted-foreground); border-color: transparent; }
+    .btn-ghost:hover { background: var(--accent); color: var(--foreground); }
+    .btn-icon-only { width: 2rem; height: 2rem; padding: 0; }
+    .icon { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .icon-sm { width: 14px; height: 14px; }
+    .icon-lg { width: 20px; height: 20px; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: .3rem;
+      font-size: .72rem; font-weight: 600; padding: .15rem .55rem;
+      border-radius: 9999px; background: var(--secondary);
+      color: var(--secondary-foreground); border: 1px solid var(--border);
+      white-space: nowrap; letter-spacing: .01em;
+    }
+    .badge-outline { background: transparent; color: var(--muted-foreground); font-weight: 500; }
+    .badge-primary { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+
+    /* ── Form elements ── */
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-label { font-size: .8rem; font-weight: 600; color: var(--foreground); }
+    .form-hint  { font-size: .73rem; color: var(--muted-foreground); line-height: 1.4; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; background: var(--background); color: var(--foreground);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      font-family: var(--font-sans); font-size: .875rem;
+      padding: .5rem .75rem; transition: border-color .15s ease, box-shadow .15s ease;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 20%, transparent);
+    }
+    .form-textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+    .form-select { cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right .6rem center; background-size: 14px;
+      padding-right: 2rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+    /* ── Header ── */
+    .site-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem; padding: 2rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-left { display: flex; flex-direction: column; gap: .6rem; }
+    .header-badges { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .site-title { font-size: 1.75rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; }
+    .site-desc  { font-size: .9rem; color: var(--muted-foreground); max-width: 540px; }
+    .header-actions { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; padding-top: .25rem; }
+
+    /* ── Type Selector ── */
+    .type-scroll-wrap {
+      overflow-x: auto; padding-bottom: .25rem;
+      scrollbar-width: thin;
+    }
+    .type-tabs {
+      display: flex; gap: .5rem; padding: 1.25rem 0 .25rem;
+      min-width: max-content;
+    }
+    .type-tab {
+      display: flex; align-items: center; gap: .45rem;
+      padding: .45rem .9rem; border-radius: var(--radius);
+      border: 1px solid var(--border); background: var(--card);
+      cursor: pointer; font-size: .8rem; font-weight: 500;
+      color: var(--muted-foreground); transition: all .15s ease;
+      white-space: nowrap; user-select: none;
+    }
+    .type-tab:hover   { border-color: var(--foreground); color: var(--foreground); }
+    .type-tab.active  { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+    .type-tab .tab-icon { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+    /* ── Main workspace ── */
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem 0 3rem;
+    }
+    @media (min-width: 860px) {
+      .workspace { grid-template-columns: 1fr 380px; }
+    }
+
+    /* ── Panel Card ── */
+    .panel-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: calc(var(--radius) + 2px);
+      display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .9rem 1.25rem; border-bottom: 1px solid var(--border);
+      gap: .75rem; flex-wrap: wrap;
+    }
+    .panel-title { font-size: .875rem; font-weight: 600; display: flex; align-items: center; gap: .4rem; }
+    .panel-body  { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; flex: 1; }
+    .panel-footer {
+      padding: .75rem 1.25rem; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: .5rem; flex-wrap: wrap; font-size: .78rem; color: var(--muted-foreground);
+    }
+
+    /* ── QR Preview Panel ── */
+    .qr-panel { position: sticky; top: 1rem; }
+    .qr-preview-area {
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem; min-height: 280px;
+      background: repeating-linear-gradient(45deg, var(--muted) 0, var(--muted) 1px, transparent 0, transparent 50%)
+        0 0 / 12px 12px;
+      border-radius: var(--radius); position: relative;
+    }
+    #qr-canvas { border-radius: var(--radius); display: block; }
+    .qr-placeholder {
+      display: flex; flex-direction: column; align-items: center;
+      gap: .75rem; color: var(--muted-foreground); font-size: .85rem; text-align: center;
+    }
+    .qr-placeholder svg { width: 48px; height: 48px; opacity: .3; }
+
+    /* ── Options grid ── */
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .color-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .color-input-wrap { display: flex; align-items: center; gap: .5rem; }
+    .color-swatch {
+      width: 2rem; height: 2rem; border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden; cursor: pointer;
+      flex-shrink: 0;
+    }
+    .color-swatch input[type=color] {
+      width: 200%; height: 200%;
+      margin: -50%; border: none; cursor: pointer; background: none;
+      padding: 0;
+    }
+    .color-hex {
+      flex: 1; font-family: var(--font-mono); font-size: .78rem;
+      background: var(--background); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: .3rem .5rem;
+      color: var(--foreground); outline: none;
+    }
+    .color-hex:focus { border-color: var(--input-focus); }
+
+    /* ── Logo uploader ── */
+    .logo-drop-zone {
+      border: 1.5px dashed var(--border); border-radius: var(--radius);
+      padding: .75rem 1rem; text-align: center; cursor: pointer;
+      transition: border-color .15s ease, background .15s ease;
+      font-size: .8rem; color: var(--muted-foreground);
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+    }
+    .logo-drop-zone:hover, .logo-drop-zone.dragover {
+      border-color: var(--foreground); background: var(--accent);
+    }
+    .logo-preview-row {
+      display: flex; align-items: center; gap: .75rem; margin-top: .4rem;
+    }
+    .logo-thumb {
+      width: 2.5rem; height: 2.5rem; object-fit: contain;
+      border-radius: var(--radius); border: 1px solid var(--border);
+      background: var(--secondary);
+    }
+
+    /* ── Download area ── */
+    .download-row { display: flex; gap: .6rem; }
+    .download-row .btn { flex: 1; }
+
+    /* ── Payment sub-selector ── */
+    .payment-sub-tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .75rem; }
+    .payment-sub-tab {
+      padding: .3rem .7rem; border-radius: var(--radius);
+      border: 1px solid var(--border); font-size: .78rem; font-weight: 500;
+      cursor: pointer; transition: all .15s ease; color: var(--muted-foreground);
+      background: var(--card);
+    }
+    .payment-sub-tab:hover  { border-color: var(--foreground); color: var(--foreground); }
+    .payment-sub-tab.active { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+
+    /* ── QR data preview ── */
+    .qr-data-preview {
+      font-family: var(--font-mono); font-size: .72rem;
+      color: var(--muted-foreground); background: var(--muted);
+      border-radius: var(--radius); padding: .5rem .75rem;
+      word-break: break-all; line-height: 1.6; max-height: 70px;
+      overflow-y: auto;
+    }
+    .hidden { display: none !important; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--primary); color: var(--primary-foreground);
+      padding: .55rem .95rem; border-radius: var(--radius);
+      font-size: .8rem; font-family: var(--font-mono); font-weight: 500;
+      box-shadow: var(--shadow-md); opacity: 0; pointer-events: none;
+      transform: translateY(8px); transition: all .2s ease; z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: .25rem 0; }
+
+    /* ── Error state ── */
+    .error-msg { font-size: .78rem; color: #ef4444; display: flex; align-items: center; gap: .3rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Early theme sync -->
+  <script>
+    (function(){
+      const s = localStorage.getItem('theme-mode');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if(s==='dark'||(! s&&d)) document.documentElement.classList.add('dark');
+    })();
+  </script>
+
+  <div class="container">
+
+    <!-- ── Header ── -->
+    <header class="site-header">
+      <div class="header-left">
+        <div class="header-badges">
+          <span class="badge">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            QR Utility
+          </span>
+          <span class="badge badge-outline">Client-side · Private</span>
+          <span class="badge badge-outline">No server · No tracking</span>
+        </div>
+        <h1 class="site-title">QR Code Generator</h1>
+        <p class="site-desc">Generate standard QR codes for URLs, WiFi, contacts, payments, messaging and more. Everything runs locally — your data never leaves your browser.</p>
+      </div>
+      <div class="header-actions">
+        <a href="../index.html" class="btn btn-outline btn-sm">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          Tools
+        </a>
+        <a href="../../index.html" class="btn btn-outline btn-sm">Portfolio</a>
+        <button id="theme-btn" class="btn btn-outline btn-icon-only btn-sm" aria-label="Toggle theme">
+          <svg id="ti-light" class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg id="ti-dark" class="icon hidden" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Type tabs ── -->
+    <div class="type-scroll-wrap" role="tablist" aria-label="QR code types">
+      <div class="type-tabs" id="type-tabs">
+        <!-- tabs injected by JS -->
+      </div>
+    </div>
+
+    <!-- ── Workspace ── -->
+    <div class="workspace">
+
+      <!-- LEFT: Input form -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-title">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            QR Content
+          </span>
+          <span id="type-label" class="badge badge-primary">URL</span>
+        </div>
+
+        <div class="panel-body" id="form-body">
+          <!-- forms injected by JS -->
+        </div>
+
+        <div class="panel-footer">
+          <span id="char-count" class="badge badge-outline">0 chars</span>
+          <span id="form-hint-footer" style="font-size:.75rem;">Fill in the fields above to generate your QR code</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Preview + options -->
+      <div style="display:flex; flex-direction:column; gap:1rem;">
+
+        <!-- QR Preview card -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span class="panel-title">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Preview
+            </span>
+            <div style="display:flex;gap:.4rem;">
+              <button id="btn-copy" class="btn btn-outline btn-sm" disabled>
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+            </div>
+          </div>
+          <div class="panel-body" style="align-items:center;">
+            <div class="qr-preview-area" id="qr-preview-area">
+              <div class="qr-placeholder" id="qr-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Fill in the form to<br>generate a QR code</span>
+              </div>
+              <canvas id="qr-canvas" class="hidden"></canvas>
+            </div>
+            <div class="qr-data-preview hidden" id="qr-data-preview"></div>
+          </div>
+          <div class="panel-footer">
+            <div class="download-row" style="width:100%;">
+              <button id="btn-download-png" class="btn btn-primary btn-sm" disabled>
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download PNG
+              </button>
+              <button id="btn-download-svg" class="btn btn-outline btn-sm" disabled>
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                SVG
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Options card -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span class="panel-title">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Options
+            </span>
+          </div>
+          <div class="panel-body">
+
+            <!-- Size & Error Correction -->
+            <div class="options-grid">
+              <div class="form-group">
+                <label class="form-label" for="opt-size">Size (px)</label>
+                <select class="form-select" id="opt-size">
+                  <option value="128">128 × 128</option>
+                  <option value="256" selected>256 × 256</option>
+                  <option value="384">384 × 384</option>
+                  <option value="512">512 × 512</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="opt-ec">Error Correction</label>
+                <select class="form-select" id="opt-ec">
+                  <option value="L">L — 7%</option>
+                  <option value="M" selected>M — 15%</option>
+                  <option value="Q">Q — 25%</option>
+                  <option value="H">H — 30%</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Colors -->
+            <div class="form-group">
+              <label class="form-label">Colors</label>
+              <div class="color-row">
+                <div class="form-group">
+                  <label class="form-label" style="font-weight:400; font-size:.75rem;">Foreground</label>
+                  <div class="color-input-wrap">
+                    <div class="color-swatch">
+                      <input type="color" id="opt-fg-color" value="#000000" aria-label="Foreground color">
+                    </div>
+                    <input type="text" class="color-hex" id="opt-fg-hex" value="#000000" maxlength="7" spellcheck="false">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" style="font-weight:400; font-size:.75rem;">Background</label>
+                  <div class="color-input-wrap">
+                    <div class="color-swatch">
+                      <input type="color" id="opt-bg-color" value="#ffffff" aria-label="Background color">
+                    </div>
+                    <input type="text" class="color-hex" id="opt-bg-hex" value="#ffffff" maxlength="7" spellcheck="false">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Logo / Center Image -->
+            <div class="form-group">
+              <label class="form-label">Center Logo <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <div class="form-hint" style="margin-bottom:.4rem;">Logo uses H error correction level for best scan reliability</div>
+              <div class="logo-drop-zone" id="logo-drop-zone" role="button" tabindex="0" aria-label="Upload logo image">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Click or drag to upload logo (PNG/SVG/JPG)
+              </div>
+              <input type="file" id="logo-file-input" class="hidden" accept="image/*" aria-label="Upload logo">
+              <div id="logo-preview-row" class="logo-preview-row hidden">
+                <img id="logo-thumb" class="logo-thumb" alt="Logo preview">
+                <div style="flex:1;">
+                  <div style="font-size:.8rem;font-weight:500;" id="logo-filename">logo.png</div>
+                  <div class="form-group" style="margin-top:.3rem;">
+                    <label class="form-label" style="font-size:.73rem;font-weight:400;">Logo size: <span id="logo-size-val">22</span>%</label>
+                    <input type="range" id="opt-logo-size" min="10" max="35" value="22" style="width:100%;accent-color:var(--foreground);">
+                  </div>
+                </div>
+                <button id="btn-remove-logo" class="btn btn-ghost btn-xs" aria-label="Remove logo">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Reset btn -->
+            <div class="divider"></div>
+            <button id="btn-reset-opts" class="btn btn-ghost btn-sm" style="align-self:flex-start;">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+              Reset to defaults
+            </button>
+          </div>
+        </div>
+
+      </div><!-- end right col -->
+    </div><!-- end workspace -->
+  </div><!-- end container -->
+
+  <div class="toast" id="toast"></div>
+
+  <!-- QRCode: canvas and SVG QR generation -->
+  <script type="module">
+  import QRCode from 'https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm';
+
+  (function () {
+    'use strict';
+
+    // ── Theme toggle ──────────────────────────────────────────
+    const themeBtn = document.getElementById('theme-btn');
+    const tiLight = document.getElementById('ti-light');
+    const tiDark  = document.getElementById('ti-dark');
+    function applyTheme(dark) {
+      document.documentElement.classList.toggle('dark', dark);
+      tiLight.classList.toggle('hidden', dark);
+      tiDark.classList.toggle('hidden', !dark);
+    }
+    applyTheme(document.documentElement.classList.contains('dark'));
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme-mode', isDark ? 'dark' : 'light');
+      applyTheme(isDark);
+    });
+
+    // ── QR Types ─────────────────────────────────────────────
+    const TYPES = [
+      { id: 'url',       label: 'URL / Website', icon: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>' },
+      { id: 'text',      label: 'Plain Text',    icon: '<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>' },
+      { id: 'wifi',      label: 'WiFi',          icon: '<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>' },
+      { id: 'email',     label: 'Email',         icon: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>' },
+      { id: 'phone',     label: 'Phone Call',    icon: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.29 6.29l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>' },
+      { id: 'whatsapp',  label: 'WhatsApp',      icon: '<path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/>' },
+      { id: 'sms',       label: 'SMS',           icon: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' },
+      { id: 'vcard',     label: 'vCard / Contact', icon: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>' },
+      { id: 'location',  label: 'Location',      icon: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>' },
+      { id: 'payment',   label: 'BD Payment',    icon: '<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>' },
+    ];
+
+    // ── Form definitions ───────────────────────────────────────
+    const FORMS = {
+      url: `
+        <div class="form-group">
+          <label class="form-label" for="f-url">Website URL</label>
+          <input class="form-input" id="f-url" type="url" placeholder="https://example.com" autocomplete="url">
+          <span class="form-hint">Include https:// for best compatibility</span>
+        </div>`,
+
+      text: `
+        <div class="form-group">
+          <label class="form-label" for="f-text">Text Content</label>
+          <textarea class="form-textarea" id="f-text" placeholder="Enter any text, note, code, or message..." rows="5"></textarea>
+          <span class="form-hint">Maximum ~2900 chars with L error correction</span>
+        </div>`,
+
+      wifi: `
+        <div class="form-group">
+          <label class="form-label" for="f-wifi-ssid">Network Name (SSID)</label>
+          <input class="form-input" id="f-wifi-ssid" type="text" placeholder="MyHomeWiFi">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-wifi-pass">Password</label>
+          <input class="form-input" id="f-wifi-pass" type="text" placeholder="Leave blank for open networks">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-wifi-sec">Security Type</label>
+            <select class="form-select" id="f-wifi-sec">
+              <option value="WPA">WPA / WPA2 / WPA3</option>
+              <option value="WEP">WEP</option>
+              <option value="nopass">None (Open)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-wifi-hidden">Hidden Network</label>
+            <select class="form-select" id="f-wifi-hidden">
+              <option value="false">No</option>
+              <option value="true">Yes</option>
+            </select>
+          </div>
+        </div>`,
+
+      email: `
+        <div class="form-group">
+          <label class="form-label" for="f-email-to">To (Email Address)</label>
+          <input class="form-input" id="f-email-to" type="email" placeholder="recipient@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-email-sub">Subject <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+          <input class="form-input" id="f-email-sub" type="text" placeholder="Hello from QR Code!">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-email-body">Message Body <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+          <textarea class="form-textarea" id="f-email-body" placeholder="Pre-filled email message..." rows="3"></textarea>
+        </div>`,
+
+      phone: `
+        <div class="form-group">
+          <label class="form-label" for="f-phone">Phone Number</label>
+          <input class="form-input" id="f-phone" type="tel" placeholder="+8801XXXXXXXXX">
+          <span class="form-hint">Include country code for international use (e.g., +880 for Bangladesh)</span>
+        </div>`,
+
+      whatsapp: `
+        <div class="form-group">
+          <label class="form-label" for="f-wa-phone">WhatsApp Number</label>
+          <input class="form-input" id="f-wa-phone" type="tel" placeholder="+8801XXXXXXXXX">
+          <span class="form-hint">Include country code without spaces or dashes</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-wa-msg">Pre-filled Message <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+          <textarea class="form-textarea" id="f-wa-msg" placeholder="Hi! I scanned your QR code..." rows="3"></textarea>
+        </div>`,
+
+      sms: `
+        <div class="form-group">
+          <label class="form-label" for="f-sms-phone">Phone Number</label>
+          <input class="form-input" id="f-sms-phone" type="tel" placeholder="+8801XXXXXXXXX">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-sms-msg">Pre-filled Message <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+          <textarea class="form-textarea" id="f-sms-msg" placeholder="Your message here..." rows="3"></textarea>
+        </div>`,
+
+      vcard: `
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-vc-first">First Name</label>
+            <input class="form-input" id="f-vc-first" type="text" placeholder="Shakib">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-vc-last">Last Name</label>
+            <input class="form-input" id="f-vc-last" type="text" placeholder="Hossain">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-vc-org">Organization <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+          <input class="form-input" id="f-vc-org" type="text" placeholder="United International University">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-vc-title">Job Title <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+          <input class="form-input" id="f-vc-title" type="text" placeholder="Lecturer, Dept. of CSE">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-vc-phone">Phone</label>
+          <input class="form-input" id="f-vc-phone" type="tel" placeholder="+8801XXXXXXXXX">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-vc-email">Email</label>
+          <input class="form-input" id="f-vc-email" type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-vc-url">Website <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+          <input class="form-input" id="f-vc-url" type="url" placeholder="https://yoursite.com">
+        </div>`,
+
+      location: `
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-lat">Latitude</label>
+            <input class="form-input" id="f-lat" type="number" step="any" placeholder="23.8103">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-lng">Longitude</label>
+            <input class="form-input" id="f-lng" type="number" step="any" placeholder="90.4125">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-loc-label">Label / Place Name <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+          <input class="form-input" id="f-loc-label" type="text" placeholder="UIU Campus, Dhaka">
+        </div>
+        <div class="form-hint">Tip: Right-click any location on Google Maps → copy coordinates</div>`,
+
+      payment: `
+        <div class="payment-sub-tabs" id="pay-sub-tabs" role="tablist">
+          <button class="payment-sub-tab active" data-pay="bkash">bKash</button>
+          <button class="payment-sub-tab" data-pay="nagad">Nagad</button>
+          <button class="payment-sub-tab" data-pay="rocket">Rocket</button>
+          <button class="payment-sub-tab" data-pay="bank">Bank Account</button>
+        </div>
+        <!-- bKash -->
+        <div id="pay-bkash" class="pay-panel">
+          <div class="form-group">
+            <label class="form-label" for="f-bk-number">bKash Number</label>
+            <input class="form-input" id="f-bk-number" type="tel" placeholder="01XXXXXXXXX">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="f-bk-amount">Amount (৳) <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <input class="form-input" id="f-bk-amount" type="number" placeholder="500">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-bk-ref">Reference <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <input class="form-input" id="f-bk-ref" type="text" placeholder="Invoice #123">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-bk-note">Note <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+            <input class="form-input" id="f-bk-note" type="text" placeholder="Payment for...">
+          </div>
+        </div>
+        <!-- Nagad -->
+        <div id="pay-nagad" class="pay-panel hidden">
+          <div class="form-group">
+            <label class="form-label" for="f-ng-number">Nagad Number</label>
+            <input class="form-input" id="f-ng-number" type="tel" placeholder="01XXXXXXXXX">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="f-ng-amount">Amount (৳) <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <input class="form-input" id="f-ng-amount" type="number" placeholder="500">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-ng-ref">Reference <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <input class="form-input" id="f-ng-ref" type="text" placeholder="Invoice #123">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-ng-note">Note <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+            <input class="form-input" id="f-ng-note" type="text" placeholder="Payment for...">
+          </div>
+        </div>
+        <!-- Rocket -->
+        <div id="pay-rocket" class="pay-panel hidden">
+          <div class="form-group">
+            <label class="form-label" for="f-rk-number">Rocket Number</label>
+            <input class="form-input" id="f-rk-number" type="tel" placeholder="01XXXXXXXXX">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="f-rk-amount">Amount (৳) <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <input class="form-input" id="f-rk-amount" type="number" placeholder="500">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-rk-ref">Reference <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <input class="form-input" id="f-rk-ref" type="text" placeholder="Invoice #123">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-rk-note">Note <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+            <input class="form-input" id="f-rk-note" type="text" placeholder="Payment for...">
+          </div>
+        </div>
+        <!-- Bank -->
+        <div id="pay-bank" class="pay-panel hidden">
+          <div class="form-group">
+            <label class="form-label" for="f-bn-name">Bank Name</label>
+            <input class="form-input" id="f-bn-name" type="text" placeholder="Dutch-Bangla Bank Ltd.">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-bn-acname">Account Name</label>
+            <input class="form-input" id="f-bn-acname" type="text" placeholder="Sheikh Shakib Hossain">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-bn-acno">Account Number</label>
+            <input class="form-input" id="f-bn-acno" type="text" placeholder="1234567890123">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="f-bn-branch">Branch <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <input class="form-input" id="f-bn-branch" type="text" placeholder="Gulshan Branch">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-bn-routing">Routing No. <span style="font-weight:400;color:var(--muted-foreground);">(optional)</span></label>
+              <input class="form-input" id="f-bn-routing" type="text" placeholder="090261XXX">
+            </div>
+          </div>
+        </div>`,
+    };
+
+    // ── State ──────────────────────────────────────────────────
+    let currentType  = 'url';
+    let currentPaySub = 'bkash';
+    let logoDataURL  = null;
+    let debounceTimer = null;
+    let lastQRData   = '';
+
+    // ── Build type tabs ────────────────────────────────────────
+    const tabsContainer = document.getElementById('type-tabs');
+    TYPES.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'type-tab' + (t.id === currentType ? ' active' : '');
+      btn.dataset.type = t.id;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', t.id === currentType);
+      btn.innerHTML = `<svg class="tab-icon" viewBox="0 0 24 24">${t.icon}</svg>${t.label}`;
+      btn.addEventListener('click', () => switchType(t.id));
+      tabsContainer.appendChild(btn);
+    });
+
+    // ── Inject first form ──────────────────────────────────────
+    const formBody  = document.getElementById('form-body');
+    const typeLabel = document.getElementById('type-label');
+    function switchType(id) {
+      currentType = id;
+      tabsContainer.querySelectorAll('.type-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.type === id);
+        b.setAttribute('aria-selected', b.dataset.type === id);
+      });
+      typeLabel.textContent = TYPES.find(t => t.id === id).label;
+      formBody.innerHTML = FORMS[id] || '';
+      // Re-attach payment sub-tabs
+      if (id === 'payment') {
+        currentPaySub = 'bkash';
+        attachPaySubTabs();
+      }
+      attachFormListeners();
+      triggerGenerate();
+    }
+    // ── Payment sub-tabs ───────────────────────────────────────
+    function attachPaySubTabs() {
+      const tabs = document.querySelectorAll('.payment-sub-tab');
+      tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentPaySub = btn.dataset.pay;
+          tabs.forEach(b => b.classList.toggle('active', b === btn));
+          document.querySelectorAll('.pay-panel').forEach(p => p.classList.toggle('hidden', p.id !== `pay-${currentPaySub}`));
+          triggerGenerate();
+        });
+      });
+    }
+
+    // ── Attach listeners to all form inputs ───────────────────
+    function attachFormListeners() {
+      formBody.querySelectorAll('input, select, textarea').forEach(el => {
+        el.addEventListener('input', () => debouncedGenerate());
+        el.addEventListener('change', () => debouncedGenerate());
+      });
+    }
+
+    // ── Build QR data string from form ─────────────────────────
+    function buildQRData() {
+      const g = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+      const esc = s => s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/"/g, '\\"');
+
+      switch (currentType) {
+        case 'url':
+          return g('f-url');
+
+        case 'text':
+          return g('f-text');
+
+        case 'wifi': {
+          const ssid   = esc(g('f-wifi-ssid'));
+          const pass   = esc(g('f-wifi-pass'));
+          const sec    = g('f-wifi-sec');
+          const hidden = g('f-wifi-hidden');
+          if (!ssid) return '';
+          return `WIFI:T:${sec};S:${ssid};P:${pass};H:${hidden};;`;
+        }
+
+        case 'email': {
+          const to   = g('f-email-to');
+          const sub  = g('f-email-sub');
+          const body = g('f-email-body');
+          if (!to) return '';
+          let url = `mailto:${to}`;
+          const params = [];
+          if (sub)  params.push(`subject=${encodeURIComponent(sub)}`);
+          if (body) params.push(`body=${encodeURIComponent(body)}`);
+          if (params.length) url += '?' + params.join('&');
+          return url;
+        }
+
+        case 'phone': {
+          const ph = g('f-phone').replace(/[^\d+*#,;]/g, '');
+          const normalized = ph.startsWith('+')
+            ? '+' + ph.slice(1).replace(/\+/g, '')
+            : ph.replace(/\+/g, '');
+          return normalized ? `tel:${normalized}` : '';
+        }
+
+        case 'whatsapp': {
+          const ph  = g('f-wa-phone').replace(/\D/g, '');
+          const msg = g('f-wa-msg');
+          if (!ph) return '';
+          let url = `https://wa.me/${ph}`;
+          if (msg) url += `?text=${encodeURIComponent(msg)}`;
+          return url;
+        }
+
+        case 'sms': {
+          const ph  = g('f-sms-phone');
+          const msg = g('f-sms-msg');
+          if (!ph) return '';
+          return msg ? `sms:${ph}?body=${encodeURIComponent(msg)}` : `sms:${ph}`;
+        }
+
+        case 'vcard': {
+          const first = g('f-vc-first'), last = g('f-vc-last');
+          if (!first && !last) return '';
+          const lines = [
+            'BEGIN:VCARD',
+            'VERSION:3.0',
+            `N:${last};${first};;;`,
+            `FN:${[first, last].filter(Boolean).join(' ')}`,
+          ];
+          if (g('f-vc-org'))   lines.push(`ORG:${g('f-vc-org')}`);
+          if (g('f-vc-title')) lines.push(`TITLE:${g('f-vc-title')}`);
+          if (g('f-vc-phone')) lines.push(`TEL;TYPE=CELL:${g('f-vc-phone')}`);
+          if (g('f-vc-email')) lines.push(`EMAIL:${g('f-vc-email')}`);
+          if (g('f-vc-url'))   lines.push(`URL:${g('f-vc-url')}`);
+          lines.push('END:VCARD');
+          return lines.join('\n');
+        }
+
+        case 'location': {
+          const lat = g('f-lat'), lng = g('f-lng');
+          if (!lat || !lng) return '';
+          const lbl = g('f-loc-label');
+          return lbl ? `geo:${lat},${lng}?q=${encodeURIComponent(lbl)}` : `geo:${lat},${lng}`;
+        }
+
+        case 'payment': {
+          const sub = currentPaySub;
+          if (sub === 'bank') {
+            const bank   = g('f-bn-name');
+            const acname = g('f-bn-acname');
+            const acno   = g('f-bn-acno');
+            if (!acno) return '';
+            const lines = [`BANK TRANSFER`];
+            if (bank)   lines.push(`Bank: ${bank}`);
+            if (acname) lines.push(`Account Name: ${acname}`);
+            lines.push(`Account No: ${acno}`);
+            const branch  = g('f-bn-branch');
+            const routing = g('f-bn-routing');
+            if (branch)  lines.push(`Branch: ${branch}`);
+            if (routing) lines.push(`Routing No: ${routing}`);
+            return lines.join('\n');
+          }
+          // Mobile wallet (bKash / Nagad / Rocket)
+          const prefix   = sub === 'bkash' ? 'bk' : sub === 'nagad' ? 'ng' : 'rk';
+          const number   = g(`f-${prefix}-number`);
+          if (!number) return '';
+          const amount   = g(`f-${prefix}-amount`);
+          const ref      = g(`f-${prefix}-ref`);
+          const note     = g(`f-${prefix}-note`);
+          const name     = sub === 'bkash' ? 'bKash' : sub === 'nagad' ? 'Nagad' : 'Rocket';
+          const lines    = [`${name} PAYMENT`, `Number: ${number}`];
+          if (amount) lines.push(`Amount: ৳${amount}`);
+          if (ref)    lines.push(`Reference: ${ref}`);
+          if (note)   lines.push(`Note: ${note}`);
+          return lines.join('\n');
+        }
+
+        default: return '';
+      }
+    }
+
+    // ── QR Generation ─────────────────────────────────────────
+    const canvas      = document.getElementById('qr-canvas');
+    const placeholder = document.getElementById('qr-placeholder');
+    const dataPreview = document.getElementById('qr-data-preview');
+    const charCount   = document.getElementById('char-count');
+    const btnDlPng    = document.getElementById('btn-download-png');
+    const btnDlSvg    = document.getElementById('btn-download-svg');
+    const btnCopy     = document.getElementById('btn-copy');
+
+    function getOpts() {
+      return {
+        size: parseInt(document.getElementById('opt-size').value),
+        ec:   document.getElementById('opt-ec').value,
+        fg:   document.getElementById('opt-fg-color').value,
+        bg:   document.getElementById('opt-bg-color').value,
+        logoSize: parseInt(document.getElementById('opt-logo-size').value) / 100,
+      };
+    }
+
+    async function generateQR() {
+      const data = buildQRData();
+      charCount.textContent = `${data.length} chars`;
+
+      if (!data) {
+        canvas.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+        dataPreview.classList.add('hidden');
+        [btnDlPng, btnDlSvg, btnCopy].forEach(b => b.disabled = true);
+        lastQRData = '';
+        return;
+      }
+
+      const opts = getOpts();
+      // If logo present, force H error correction
+      const ec = logoDataURL ? 'H' : opts.ec;
+
+      try {
+        await QRCode.toCanvas(canvas, data, {
+          width: opts.size,
+          margin: 2,
+          errorCorrectionLevel: ec,
+          color: { dark: opts.fg, light: opts.bg },
+        });
+
+        // Draw logo on top if present
+        if (logoDataURL) {
+          await overlayLogo(canvas, opts, logoDataURL);
+        }
+
+        canvas.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        dataPreview.classList.remove('hidden');
+        dataPreview.textContent = data;
+        [btnDlPng, btnDlSvg, btnCopy].forEach(b => b.disabled = false);
+        lastQRData = data;
+      } catch (err) {
+        showError('QR data too long or invalid. Try reducing content or use L error correction.');
+        canvas.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+        dataPreview.classList.add('hidden');
+        [btnDlPng, btnDlSvg, btnCopy].forEach(b => b.disabled = true);
+      }
+    }
+
+    async function overlayLogo(canvas, opts, logoSrc) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const ctx = canvas.getContext('2d');
+          const size = opts.size;
+          const lSize = Math.round(size * opts.logoSize);
+          const lX = Math.round((size - lSize) / 2);
+          const lY = Math.round((size - lSize) / 2);
+          const pad = 6;
+          // White bg rounded rect
+          ctx.fillStyle = opts.bg;
+          ctx.beginPath();
+          roundRect(ctx, lX - pad, lY - pad, lSize + pad*2, lSize + pad*2, 8);
+          ctx.fill();
+          // Draw logo
+          ctx.drawImage(img, lX, lY, lSize, lSize);
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = logoSrc;
+      });
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function debouncedGenerate() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(generateQR, 300);
+    }
+
+    function triggerGenerate() {
+      clearTimeout(debounceTimer);
+      generateQR();
+    }
+
+    // ── Options listeners ──────────────────────────────────────
+    ['opt-size', 'opt-ec', 'opt-logo-size'].forEach(id => {
+      document.getElementById(id).addEventListener('change', triggerGenerate);
+    });
+    document.getElementById('opt-logo-size').addEventListener('input', e => {
+      document.getElementById('logo-size-val').textContent = e.target.value;
+      debouncedGenerate();
+    });
+
+    // Color pickers ↔ hex inputs sync
+    function syncColors(pickerId, hexId, forward) {
+      const picker = document.getElementById(pickerId);
+      const hex    = document.getElementById(hexId);
+      if (forward) {
+        hex.value = picker.value;
+      } else {
+        const v = hex.value.trim();
+        if (/^#[0-9A-Fa-f]{6}$/.test(v)) picker.value = v;
+      }
+      triggerGenerate();
+    }
+    document.getElementById('opt-fg-color').addEventListener('input', () => syncColors('opt-fg-color','opt-fg-hex', true));
+    document.getElementById('opt-bg-color').addEventListener('input', () => syncColors('opt-bg-color','opt-bg-hex', true));
+    document.getElementById('opt-fg-hex').addEventListener('input',  () => syncColors('opt-fg-color','opt-fg-hex', false));
+    document.getElementById('opt-bg-hex').addEventListener('input',  () => syncColors('opt-bg-color','opt-bg-hex', false));
+
+    // ── Logo upload ────────────────────────────────────────────
+    const logoDropZone = document.getElementById('logo-drop-zone');
+    const logoFileInput = document.getElementById('logo-file-input');
+    const logoPreviewRow = document.getElementById('logo-preview-row');
+    const logoThumb = document.getElementById('logo-thumb');
+    const logoFilename = document.getElementById('logo-filename');
+
+    logoDropZone.addEventListener('click', () => logoFileInput.click());
+    logoDropZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') logoFileInput.click(); });
+    logoDropZone.addEventListener('dragover', e => { e.preventDefault(); logoDropZone.classList.add('dragover'); });
+    logoDropZone.addEventListener('dragleave', () => logoDropZone.classList.remove('dragover'));
+    logoDropZone.addEventListener('drop', e => {
+      e.preventDefault(); logoDropZone.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) loadLogoFile(e.dataTransfer.files[0]);
+    });
+    logoFileInput.addEventListener('change', () => {
+      if (logoFileInput.files[0]) loadLogoFile(logoFileInput.files[0]);
+    });
+
+    function loadLogoFile(file) {
+      if (!file.type.startsWith('image/')) { showToast('Please upload an image file.'); return; }
+      const reader = new FileReader();
+      reader.onload = e => {
+        logoDataURL = e.target.result;
+        logoThumb.src = logoDataURL;
+        logoFilename.textContent = file.name;
+        logoDropZone.classList.add('hidden');
+        logoPreviewRow.classList.remove('hidden');
+        // Auto-set EC to H
+        document.getElementById('opt-ec').value = 'H';
+        triggerGenerate();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.getElementById('btn-remove-logo').addEventListener('click', () => {
+      logoDataURL = null;
+      logoFileInput.value = '';
+      logoThumb.src = '';
+      logoDropZone.classList.remove('hidden');
+      logoPreviewRow.classList.add('hidden');
+      triggerGenerate();
+    });
+
+    // ── Reset options ──────────────────────────────────────────
+    document.getElementById('btn-reset-opts').addEventListener('click', () => {
+      document.getElementById('opt-size').value = '256';
+      document.getElementById('opt-ec').value   = 'M';
+      document.getElementById('opt-fg-color').value = '#000000';
+      document.getElementById('opt-fg-hex').value   = '#000000';
+      document.getElementById('opt-bg-color').value = '#ffffff';
+      document.getElementById('opt-bg-hex').value   = '#ffffff';
+      document.getElementById('opt-logo-size').value = '22';
+      document.getElementById('logo-size-val').textContent = '22';
+      triggerGenerate();
+    });
+
+    // ── Download PNG ───────────────────────────────────────────
+    btnDlPng.addEventListener('click', () => {
+      if (!lastQRData) return;
+      const link = document.createElement('a');
+      link.download = `qr-${currentType}-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('PNG downloaded!');
+    });
+
+    // ── Download SVG ───────────────────────────────────────────
+    btnDlSvg.addEventListener('click', async () => {
+      if (!lastQRData) return;
+      try {
+        const opts = getOpts();
+        const ec   = logoDataURL ? 'H' : opts.ec;
+        const svgStr = await QRCode.toString(lastQRData, {
+          type: 'svg',
+          width: opts.size,
+          margin: 2,
+          errorCorrectionLevel: ec,
+          color: { dark: opts.fg, light: opts.bg },
+        });
+        const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+        const url  = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `qr-${currentType}-${Date.now()}.svg`;
+        link.href = url;
+        link.click();
+        URL.revokeObjectURL(url);
+        showToast('SVG downloaded!');
+      } catch(e) {
+        showToast('SVG export failed.');
+      }
+    });
+
+    // ── Copy to clipboard ──────────────────────────────────────
+    btnCopy.addEventListener('click', async () => {
+      if (!lastQRData || canvas.classList.contains('hidden')) return;
+      try {
+        canvas.toBlob(async blob => {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          showToast('QR image copied to clipboard!');
+        });
+      } catch (e) {
+        showToast('Copy failed — try Download instead.');
+      }
+    });
+
+    // ── Toast ──────────────────────────────────────────────────
+    const toastEl = document.getElementById('toast');
+    let toastTimer;
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
+    }
+    function showError(msg) { showToast('⚠ ' + msg); }
+
+    switchType('url');
+  })();
+  </script>
+</body>
+</html>
