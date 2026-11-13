@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Editor | Live WYSIWYG Google Docs-style Editor</title>
+  <meta name="description" content="Write Markdown on the left and edit it like a Google Doc on the right. Full Docs toolbar with fonts, colors, highlight, alignment, tables and lists, plus real-time two-way sync.">
+  <meta name="keywords" content="markdown editor, live preview, wysiwyg, google docs clone, markdown to html, two way sync, md editor, client-side editor">
+  <meta name="author" content="Sheikh Shakib Hossain">
+  <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+  <script>
+    // Early theme script to prevent FOUC (Flash of Unstyled Content)
+    (function () {
+      const savedTheme = localStorage.getItem('theme-mode');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <!-- Inter + JetBrains Mono from Google CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="site-header" role="banner">
+      <div class="header-left">
+        <div class="header-badge-group">
+          <span class="badge">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            Writing Utility
+          </span>
+          <span class="badge badge-outline">Client-side &amp; Private</span>
+        </div>
+        <h1 class="site-title">Markdown Editor</h1>
+        <p class="site-description">
+          Type Markdown on the left and edit the result like a Google Doc on the right — full Docs toolbar, live two-way sync, nothing leaves your browser.
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <a href="../index.html" class="btn btn-outline btn-sm" title="Back to Tools Directory">
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Tools
+        </a>
+        <a href="../../index.html" class="btn btn-outline btn-sm" title="Back to Portfolio">
+          Portfolio
+        </a>
+        <button id="theme-toggle-btn" class="btn btn-outline btn-icon-only btn-sm" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+          <!-- Sun icon (for dark mode to switch to light) -->
+          <svg id="theme-icon-light" class="icon icon-md" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <!-- Moon icon (for light mode to switch to dark) -->
+          <svg id="theme-icon-dark" class="icon icon-md" style="display:none;" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <main role="main">
+      <!-- Two-pane editor workspace -->
+      <section class="editor-shell" aria-label="Markdown editor workspace">
+
+        <!-- ============ LEFT PANE: Markdown Source ============ -->
+        <section class="panel-card" aria-labelledby="source-pane-title">
+          <div class="panel-header">
+            <div class="panel-title-area">
+              <h3 class="panel-title" id="source-pane-title">Markdown Source</h3>
+              <span id="md-stats-badge" class="badge badge-outline">0 words</span>
+            </div>
+
+            <div class="panel-toolbar">
+              <button id="sample-btn" type="button" class="btn btn-outline btn-sm" title="Fill with a sample document">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Sample
+              </button>
+              <button id="upload-btn" type="button" class="btn btn-outline btn-sm" title="Upload a .md or .txt file">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                Upload
+              </button>
+              <input type="file" id="file-input" class="visually-hidden" accept=".md,.markdown,.txt" aria-label="Upload markdown file">
+              <div class="export-wrapper">
+                <button id="export-btn" type="button" class="btn btn-outline btn-sm" title="Export the document in another format" aria-haspopup="true" aria-expanded="false">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Export
+                  <svg class="icon icon-caret" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div id="export-menu" class="export-menu" role="menu" hidden>
+                  <button type="button" class="export-item" data-export="docx" role="menuitem">
+                    <span class="export-ext">DOCX</span>
+                    <span class="export-desc">Microsoft Word document</span>
+                  </button>
+                  <button type="button" class="export-item" data-export="pdf" role="menuitem">
+                    <span class="export-ext">PDF</span>
+                    <span class="export-desc">Print-ready PDF</span>
+                  </button>
+                  <button type="button" class="export-item" data-export="html" role="menuitem">
+                    <span class="export-ext">HTML</span>
+                    <span class="export-desc">Standalone web page</span>
+                  </button>
+                  <button type="button" class="export-item" data-export="md" role="menuitem">
+                    <span class="export-ext">MD</span>
+                    <span class="export-desc">Markdown source</span>
+                  </button>
+                  <button type="button" class="export-item" data-export="txt" role="menuitem">
+                    <span class="export-ext">TXT</span>
+                    <span class="export-desc">Plain text</span>
+                  </button>
+                </div>
+              </div>
+              <button id="copy-btn" type="button" class="btn btn-outline btn-sm" title="Copy markdown to clipboard">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy
+              </button>
+              <button id="clear-btn" type="button" class="btn btn-ghost btn-sm" title="Clear both panes">
+                <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <textarea
+              id="markdown-input"
+              class="code-textarea"
+              placeholder="Start typing Markdown here...&#10;&#10;The document on the right updates live,&#10;and edits you make there flow back here."
+              spellcheck="false"
+              aria-label="Markdown source"
+            ></textarea>
+            <div id="dropzone-overlay" class="dropzone-overlay">
+              <span class="dropzone-text">Drop .md file to load</span>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="status-left">
+              <span id="md-lines-count">0 lines</span>
+              <span class="dot-sep">•</span>
+              <span id="md-chars-count">0 chars</span>
+            </div>
+            <div class="status-right">
+              <span>Automatic real-time parsing</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ RIGHT PANE: Google Docs-style document ============ -->
+        <section class="panel-card" aria-labelledby="doc-pane-title">
+          <div class="panel-header">
+            <div class="panel-title-area">
+              <h3 class="panel-title" id="doc-pane-title">Document</h3>
+              <span id="doc-stats-badge" class="badge badge-outline">0 words</span>
+            </div>
+            <div class="panel-toolbar">
+              <span class="badge badge-outline" title="Sync status">
+                <span id="sync-status">Synced</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- ===== Google Docs-style toolbar ===== -->
+          <div class="docs-toolbar" id="docs-toolbar" role="toolbar" aria-label="Document formatting toolbar">
+
+            <!-- Undo / Redo / Print -->
+            <div class="tb-group">
+              <button type="button" class="tb-btn" data-cmd="undo" title="Undo (Ctrl+Z)" aria-label="Undo">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M3 7v6h6"></path><path d="M3.51 13a9 9 0 1 0 2.13-9.36L3 7"></path></svg>
+              </button>
+              <button type="button" class="tb-btn" data-cmd="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M21 7v6h-6"></path><path d="M20.49 13a9 9 0 1 1-2.13-9.36L21 7"></path></svg>
+              </button>
+              <button type="button" class="tb-btn" id="print-btn" title="Print document" aria-label="Print">
+                <svg class="icon" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              </button>
+            </div>
+
+            <!-- Zoom -->
+            <div class="tb-group">
+              <label class="tb-label" for="zoom-select">Zoom</label>
+              <select id="zoom-select" class="tb-select tb-select-sm" aria-label="Document zoom">
+                <option value="0.5">50%</option>
+                <option value="0.75">75%</option>
+                <option value="1" selected>100%</option>
+                <option value="1.25">125%</option>
+                <option value="1.5">150%</option>
+                <option value="2">200%</option>
+              </select>
+            </div>
+
+            <!-- Styles -->
+            <div class="tb-group">
+              <select id="style-select" class="tb-select tb-select-wide" aria-label="Paragraph style">
+                <option value="p" selected>Normal text</option>
+                <option value="h1">Title</option>
+                <option value="h2">Heading 1</option>
+                <option value="h3">Heading 2</option>
+                <option value="h4">Heading 3</option>
+                <option value="pre">Preformatted text</option>
+                <option value="blockquote">Quote</option>
+              </select>
+            </div>
+
+            <!-- Font family -->
+            <div class="tb-group">
+              <select id="font-select" class="tb-select tb-select-wide" aria-label="Font family">
+                <option value="Arial" selected>Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Calibri">Calibri</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Courier New">Courier New</option>
+                <option value="JetBrains Mono">JetBrains Mono</option>
+              </select>
+            </div>
+
+            <!-- Font size -->
+            <div class="tb-group">
+              <select id="fontsize-select" class="tb-select tb-select-sm" aria-label="Font size">
+                <option value="10">10</option>
+                <option value="11" selected>11</option>
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+                <option value="24">24</option>
+                <option value="30">30</option>
+                <option value="36">36</option>
+                <option value="48">48</option>
+              </select>
+              <span class="tb-label">pt</span>
+            </div>
+
+            <!-- Bold / Italic / Underline / Strikethrough -->
+            <div class="tb-group">
+              <button type="button" class="tb-btn tb-btn-bold" data-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold">B</button>
+              <button type="button" class="tb-btn tb-btn-italic" data-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic">I</button>
+              <button type="button" class="tb-btn tb-btn-underline" data-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline">U</button>
+              <button type="button" class="tb-btn tb-btn-strike" data-cmd="strikeThrough" title="Strikethrough" aria-label="Strikethrough">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12"></line><path d="M16 6H9.5a3.5 3.5 0 0 0 0 7h1"></path><path d="M8 18h7.5a3.5 3.5 0 0 0 0-7h-.5"></path></svg>
+              </button>
+            </div>
+
+            <!-- Text color / Highlight color -->
+            <div class="tb-group">
+              <button type="button" class="tb-btn tb-btn-color" id="textcolor-btn" title="Text color" aria-label="Text color">
+                <span class="tb-color-glyph">A</span>
+                <span class="tb-color-bar" id="textcolor-bar"></span>
+              </button>
+              <div class="tb-popover" id="textcolor-popover" hidden>
+                <div class="tb-popover-title">Text color</div>
+                <div class="tb-swatches" id="textcolor-swatches"></div>
+              </div>
+
+              <button type="button" class="tb-btn tb-btn-color" id="highlight-btn" title="Highlight color" aria-label="Highlight color">
+                <span class="tb-color-glyph tb-highlight-glyph">A</span>
+                <span class="tb-color-bar" id="highlight-bar"></span>
+              </button>
+              <div class="tb-popover" id="highlight-popover" hidden>
+                <div class="tb-popover-title">Highlight color</div>
+                <div class="tb-swatches" id="highlight-swatches"></div>
+              </div>
+            </div>
+
+            <!-- Alignment -->
+            <div class="tb-group">
+              <button type="button" class="tb-btn" data-cmd="justifyLeft" title="Align left" aria-label="Align left">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="15" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+              </button>
+              <button type="button" class="tb-btn" data-cmd="justifyCenter" title="Center" aria-label="Center">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+              </button>
+              <button type="button" class="tb-btn" data-cmd="justifyRight" title="Align right" aria-label="Align right">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="9" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+              </button>
+              <button type="button" class="tb-btn" data-cmd="justifyFull" title="Justify" aria-label="Justify">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+              </button>
+            </div>
+
+            <!-- Line spacing -->
+            <div class="tb-group">
+              <label class="tb-label" for="spacing-select">Spacing</label>
+              <select id="spacing-select" class="tb-select tb-select-sm" aria-label="Line spacing">
+                <option value="1" selected>1.0</option>
+                <option value="1.15">1.15</option>
+                <option value="1.5">1.5</option>
+                <option value="2">2.0</option>
+              </select>
+            </div>
+
+            <!-- Lists -->
+            <div class="tb-group">
+              <button type="button" class="tb-btn" data-cmd="insertUnorderedList" title="Bulleted list" aria-label="Bulleted list">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="9" y1="6" x2="21" y2="6"></line><line x1="9" y1="12" x2="21" y2="12"></line><line x1="9" y1="18" x2="21" y2="18"></line><circle cx="4" cy="6" r="1.5"></circle><circle cx="4" cy="12" r="1.5"></circle><circle cx="4" cy="18" r="1.5"></circle></svg>
+              </button>
+              <button type="button" class="tb-btn" data-cmd="insertOrderedList" title="Numbered list" aria-label="Numbered list">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="10" y1="6" x2="21" y2="6"></line><line x1="10" y1="12" x2="21" y2="12"></line><line x1="10" y1="18" x2="21" y2="18"></line><path d="M4 6h1V4H4v2zM4 10h2l-2 3h2v1H4v-1l2-3H4V9zM4 15h2v1H4v1h2v1H4v-1h1v-1H4v-1h2z"></path></svg>
+              </button>
+              <button type="button" class="tb-btn" id="checklist-btn" title="Checklist" aria-label="Checklist">
+                <svg class="icon" viewBox="0 0 24 24"><polyline points="3 7 5 9 9 4"></polyline><polyline points="3 17 5 19 9 14"></polyline><line x1="13" y1="7" x2="21" y2="7"></line><line x1="13" y1="17" x2="21" y2="17"></line></svg>
+              </button>
+            </div>
+
+            <!-- Indent -->
+            <div class="tb-group">
+              <button type="button" class="tb-btn" data-cmd="outdent" title="Decrease indent" aria-label="Decrease indent">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="21" y1="6" x2="11" y2="6"></line><line x1="21" y1="12" x2="11" y2="12"></line><line x1="21" y1="18" x2="11" y2="18"></line><polyline points="7 9 3 12 7 15"></polyline></svg>
+              </button>
+              <button type="button" class="tb-btn" data-cmd="indent" title="Increase indent" aria-label="Increase indent">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="21" y1="6" x2="11" y2="6"></line><line x1="21" y1="12" x2="11" y2="12"></line><line x1="21" y1="18" x2="11" y2="18"></line><polyline points="3 9 7 12 3 15"></polyline></svg>
+              </button>
+            </div>
+
+            <!-- Insert -->
+            <div class="tb-group">
+              <button type="button" class="tb-btn" id="link-btn" title="Insert link (Ctrl+K)" aria-label="Insert link">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+              </button>
+              <button type="button" class="tb-btn" id="image-btn" title="Insert image from your computer (or drag &amp; drop one onto the page)" aria-label="Insert image">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              </button>
+              <input type="file" id="image-file-input" class="visually-hidden" accept="image/*" aria-label="Choose an image file">
+              <button type="button" class="tb-btn" id="image-url-btn" title="Insert image from a URL" aria-label="Insert image from URL">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+              </button>
+              <button type="button" class="tb-btn" id="table-btn" title="Insert table" aria-label="Insert table">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+              </button>
+              <button type="button" class="tb-btn" id="hr-btn" title="Insert horizontal line" aria-label="Insert horizontal line">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line></svg>
+              </button>
+              <button type="button" class="tb-btn" data-cmd="formatBlock:blockquote" title="Blockquote" aria-label="Blockquote">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M3 21c3 0 7-1 7-8V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h3"></path><path d="M15 21c3 0 7-1 7-8V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h3"></path></svg>
+              </button>
+            </div>
+
+            <!-- Clear formatting -->
+            <div class="tb-group">
+              <button type="button" class="tb-btn" data-cmd="removeFormat" title="Clear formatting" aria-label="Clear formatting">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 7V4h16v3"></path><path d="M5 20h6"></path><path d="M13 4L8 20"></path><line x1="15" y1="13" x2="21" y2="19"></line><line x1="21" y1="13" x2="15" y2="19"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Document surface (Google Docs paper look) -->
+          <div class="doc-surface" id="doc-surface">
+            <div
+              id="doc-editor"
+              class="doc-editor"
+              contenteditable="true"
+              spellcheck="false"
+              role="textbox"
+              aria-multiline="true"
+              aria-label="Document editor"
+            ><p><br></p></div>
+            <div id="image-dropzone-overlay" class="dropzone-overlay">
+              <span class="dropzone-text">Drop an image to insert it</span>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="status-left">
+              <span id="doc-words-count">0 words displayed</span>
+            </div>
+            <div class="status-right">
+              <span>Google Docs-style editing</span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" aria-live="polite">
+    <div id="toast-notification" class="toast" role="status">
+      <svg class="icon icon-md" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      <span id="toast-message">Copied to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- Scripts (classic scripts — required for file:// compatibility) -->
+  <script src="lib/marked.umd.js"></script>
+  <script src="lib/turndown.browser.umd.js"></script>
+  <script src="lib/turndown-plugin-gfm.js"></script>
+  <script src="lib/purify.min.js"></script>
+  <script src="lib/docx.umd.js"></script>
+  <script src="lib/jspdf.umd.min.js"></script>
+  <script src="lib/html2canvas.min.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>
