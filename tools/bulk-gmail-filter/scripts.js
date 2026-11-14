@@ -98,6 +98,29 @@
     if (el.inputTextarea.value.trim().length > 0) {
       processInput();
     }
+
+    // A browser can restore a textarea's value without firing an "input"
+    // event (bfcache back-navigation, password managers, "restore form
+    // state"). When that happens the buttons stay disabled even though the
+    // text is visible on screen. Re-check whenever the page is shown again
+    // and whenever focus returns to the textarea.
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) syncInputFromTextarea();
+    });
+    window.addEventListener('pageshow', () => syncInputFromTextarea());
+    window.addEventListener('focus', syncInputFromTextarea);
+    el.inputTextarea.addEventListener('focus', syncInputFromTextarea);
+  }
+
+  /**
+   * Re-parse the input if its contents changed without an "input" event.
+   * Cheap: only calls processInput() when the text actually differs from
+   * what we last parsed.
+   */
+  function syncInputFromTextarea() {
+    const current = el.inputTextarea.value;
+    if (current === state.rawInput) return;
+    processInput();
   }
 
   // --- Theme Management ---
@@ -533,7 +556,10 @@
     const isEmpty = outputResult.trim().length === 0;
     el.copyBtn.disabled = isEmpty;
     el.downloadBtn.disabled = isEmpty;
-    el.gmailBtn.disabled = isEmpty;
+
+    // The Gmail button needs actual email addresses, not just any output:
+    // "Full CSV Rows" mode can produce text with no usable recipients.
+    el.gmailBtn.disabled = collectRecipientEmails().length === 0;
   }
 
   // --- Copy to Clipboard ---
