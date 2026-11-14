@@ -586,6 +586,25 @@ body {
   background-color: var(--accent);
 }
 
+/* Gmail button — keeps the Google brand colours on the logo only, so it
+   still reads as part of the monochrome UI. */
+.btn-gmail {
+  background-color: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+.btn-gmail:hover:not(:disabled) {
+  background-color: var(--accent);
+  border-color: var(--input-focus);
+}
+
+.gmail-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+}
+
 .btn-sm {
   height: 1.85rem;
   font-size: 0.75rem;

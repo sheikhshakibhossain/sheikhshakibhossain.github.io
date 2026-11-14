@@ -54,6 +54,7 @@
     // Output panel
     outputTextarea: document.getElementById('output-csv'),
     copyBtn: document.getElementById('copy-btn'),
+    gmailBtn: document.getElementById('gmail-btn'),
     downloadBtn: document.getElementById('download-btn'),
     outputCountBadge: document.getElementById('output-count-badge'),
     outputEmailsCount: document.getElementById('output-emails-count'),
@@ -222,6 +223,9 @@
 
     // Download CSV
     el.downloadBtn.addEventListener('click', downloadOutputCsv);
+
+    // Open the filtered emails as Gmail recipients
+    el.gmailBtn.addEventListener('click', openInGmail);
   }
 
   // --- Drag and Drop File Loading ---
@@ -529,6 +533,7 @@
     const isEmpty = outputResult.trim().length === 0;
     el.copyBtn.disabled = isEmpty;
     el.downloadBtn.disabled = isEmpty;
+    el.gmailBtn.disabled = isEmpty;
   }
 
   // --- Copy to Clipboard ---
@@ -580,6 +585,63 @@
       el.copyBtn.classList.remove('btn-secondary');
       el.copyBtn.classList.add('btn-primary');
     }, 2000);
+  }
+
+  // --- Open in Gmail ---
+  // Gmail's compose endpoint accepts a comma separated `to` parameter. It
+  // truncates very long recipient lists, so we cap what we send and tell the
+  // user how many were dropped.
+  const GMAIL_RECIPIENT_LIMIT = 100;
+
+  function collectRecipientEmails() {
+    // The output textarea holds the filtered result, but it may be in "Full
+    // CSV Rows" mode (one whole row per line) or joined by an arbitrary
+    // delimiter. Re-extract the emails from it so we always get bare
+    // addresses regardless of the current output settings.
+    const text = el.outputTextarea.value;
+    if (!text || text.trim().length === 0) return [];
+
+    const found = text.match(EMAIL_REGEX);
+    if (!found) return [];
+
+    const unique = [];
+    const seen = new Set();
+    found.forEach(email => {
+      const normalized = state.lowercase ? email.toLowerCase() : email;
+      if (!seen.has(normalized)) {
+        seen.add(normalized);
+        unique.push(normalized);
+      }
+    });
+    return unique;
+  }
+
+  function openInGmail() {
+    const emails = collectRecipientEmails();
+
+    if (emails.length === 0) {
+      showToast('No email addresses to send to');
+      return;
+    }
+
+    const recipients = emails.slice(0, GMAIL_RECIPIENT_LIMIT);
+    const dropped = emails.length - recipients.length;
+
+    const url = 'https://mail.google.com/mail/?view=cm&fs=1&to=' +
+      encodeURIComponent(recipients.join(','));
+
+    const popup = window.open(url, '_blank', 'noopener,noreferrer,width=1200,height=800');
+
+    if (!popup) {
+      showToast('Popup blocked — allow popups or open Gmail manually');
+      return;
+    }
+
+    if (dropped > 0) {
+      showToast(`Opened Gmail with ${recipients.length} of ${emails.length} recipients`);
+    } else {
+      showToast(`Opened Gmail with ${recipients.length} recipient${recipients.length === 1 ? '' : 's'}`);
+    }
   }
 
   // --- Download CSV File ---
