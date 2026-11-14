@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid Flowchart Editor | Live Drag &amp; Export | Tools</title>
+  <meta name="description" content="Write Mermaid flowchart code on the left and see the diagram live on the right. Drag nodes to rearrange the flow, sync changes back to code in real time, and export to PNG, JPG or SVG.">
+  <meta name="keywords" content="mermaid, flowchart, diagram, editor, drag and drop, live preview, export png, export svg, mermaid flowchart, diagram editor">
+  <meta name="author" content="Sheikh Shakib Hossain">
+  <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+  <script>
+    // Early theme script to prevent FOUC (Flash of Unstyled Content)
+    (function () {
+      const savedTheme = localStorage.getItem('theme-mode');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <!-- Inter + JetBrains Mono from Google CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Mermaid (UMD build, exposes window.mermaid) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="site-header" role="banner">
+      <div class="header-left">
+        <div class="header-badge-group">
+          <span class="badge">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="3"></circle><circle cx="19" cy="5" r="3"></circle><circle cx="19" cy="19" r="3"></circle><line x1="7.5" y1="10.5" x2="16.5" y2="6"></line><line x1="7.5" y1="13.5" x2="16.5" y2="18"></line></svg>
+            Diagram Utility
+          </span>
+          <span class="badge badge-outline">Client-side &amp; Private</span>
+        </div>
+        <h1 class="site-title">Mermaid Flowchart Editor</h1>
+        <p class="site-description">
+          Write Mermaid on the left, watch the diagram build on the right. Drag any node to
+          reshape the flow, and the code updates to match — export the result as PNG, JPG or SVG.
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <a href="../index.html" class="btn btn-outline btn-sm" title="Back to Tools Directory">
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Tools
+        </a>
+        <a href="../../index.html" class="btn btn-outline btn-sm" title="Back to Portfolio">
+          Portfolio
+        </a>
+        <button id="theme-toggle-btn" class="btn btn-outline btn-icon-only btn-sm" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+          <!-- Sun icon (for dark mode to switch to light) -->
+          <svg id="theme-icon-light" class="icon icon-md" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <!-- Moon icon (for light mode to switch to dark) -->
+          <svg id="theme-icon-dark" class="icon icon-md" style="display:none;" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <main role="main">
+      <!-- Two-pane workspace -->
+      <section class="editor-shell" aria-label="Mermaid flowchart workspace">
+
+        <!-- ============ LEFT PANE: Mermaid Source ============ -->
+        <section class="panel-card" aria-labelledby="source-pane-title">
+          <div class="panel-header">
+            <div class="panel-title-area">
+              <h3 class="panel-title" id="source-pane-title">Mermaid Code</h3>
+              <span id="parse-status-badge" class="badge badge-outline">Ready</span>
+            </div>
+
+            <div class="panel-toolbar">
+              <button id="sample-btn" type="button" class="btn btn-outline btn-sm" title="Load a sample flowchart">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                Sample
+              </button>
+
+              <div class="select-wrapper">
+                <label class="visually-hidden" for="direction-select">Flow direction</label>
+                <select id="direction-select" class="select-control" title="Change the flow direction">
+                  <option value="TB">↓ Top to bottom</option>
+                  <option value="TD">↓ Top to bottom</option>
+                  <option value="LR">→ Left to right</option>
+                  <option value="RL">← Right to left</option>
+                  <option value="BT">↑ Bottom to top</option>
+                </select>
+              </div>
+
+              <button id="layout-btn" type="button" class="btn btn-outline btn-sm" title="Re-run the automatic layout and clear manual positions">
+                <svg class="icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                Auto layout
+              </button>
+
+              <button id="copy-btn" type="button" class="btn btn-outline btn-sm" title="Copy Mermaid code to clipboard">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy
+              </button>
+
+              <button id="clear-btn" type="button" class="btn btn-ghost btn-sm" title="Clear the editor">
+                <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <textarea
+              id="mermaid-input"
+              class="code-textarea"
+              spellcheck="false"
+              aria-label="Mermaid source code"
+              placeholder="flowchart TD&#10;    A[Start] --> B{Decision}&#10;    B -->|Yes| C[Do the thing]&#10;    B -->|No| D[Stop]"
+            ></textarea>
+
+            <div id="error-box" class="error-box" role="alert" hidden>
+              <div class="error-header">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span id="error-title">Syntax error</span>
+                <button id="fix-error-btn" type="button" class="btn btn-outline btn-sm error-fix-btn" hidden>
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                  Fix it
+                </button>
+              </div>
+              <pre id="error-message" class="error-message"></pre>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <span class="footer-meta" id="node-count">0 nodes</span>
+            <span class="footer-meta" id="char-count">0 characters</span>
+            <span class="footer-meta" id="position-state">No manual positions</span>
+          </div>
+        </section>
+
+        <!-- ============ RIGHT PANE: Diagram Preview ============ -->
+        <section class="panel-card" aria-labelledby="preview-pane-title">
+          <div class="panel-header">
+            <div class="panel-title-area">
+              <h3 class="panel-title" id="preview-pane-title">Diagram</h3>
+              <span class="badge badge-outline" id="drag-hint">Drag nodes to rearrange</span>
+            </div>
+
+            <div class="panel-toolbar">
+              <div class="select-wrapper">
+                <label class="visually-hidden" for="theme-select">Diagram theme</label>
+                <select id="theme-select" class="select-control" title="Diagram colour theme">
+                  <option value="auto">Theme: Auto</option>
+                  <option value="default">Theme: Default</option>
+                  <option value="neutral">Theme: Neutral</option>
+                  <option value="dark">Theme: Dark</option>
+                  <option value="forest">Theme: Forest</option>
+                  <option value="base">Theme: Base</option>
+                </select>
+              </div>
+
+              <button id="zoom-out-btn" type="button" class="btn btn-outline btn-icon-only btn-sm" title="Zoom out" aria-label="Zoom out">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+              </button>
+              <span id="zoom-level" class="zoom-level" aria-live="polite">100%</span>
+              <button id="zoom-in-btn" type="button" class="btn btn-outline btn-icon-only btn-sm" title="Zoom in" aria-label="Zoom in">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line><line x1="11" y1="8" x2="11" y2="14"></line></svg>
+              </button>
+              <button id="fit-btn" type="button" class="btn btn-outline btn-sm" title="Fit the diagram to the panel">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M21 8V5a2 2 0 0 0-2-2h-3"></path><path d="M3 16v3a2 2 0 0 0 2 2h3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path></svg>
+                Fit
+              </button>
+
+              <div class="export-wrapper">
+                <button id="export-btn" type="button" class="btn btn-primary btn-sm" title="Export the diagram in another format" aria-haspopup="true" aria-expanded="false">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Export
+                  <svg class="icon icon-caret" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div id="export-menu" class="export-menu" role="menu" hidden>
+                  <button type="button" class="export-item" data-export="png" role="menuitem">
+                    <span class="export-ext">PNG</span>
+                    <span class="export-desc">Raster image, transparent or themed background</span>
+                  </button>
+                  <button type="button" class="export-item" data-export="jpg" role="menuitem">
+                    <span class="export-ext">JPG</span>
+                    <span class="export-desc">Raster image with a solid background</span>
+                  </button>
+                  <button type="button" class="export-item" data-export="svg" role="menuitem">
+                    <span class="export-ext">SVG</span>
+                    <span class="export-desc">Vector file, scales without blur</span>
+                  </button>
+                  <button type="button" class="export-item" data-export="mermaid" role="menuitem">
+                    <span class="export-ext">.mmd</span>
+                    <span class="export-desc">Mermaid source file</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-body preview-body" id="preview-body">
+            <div id="diagram-viewport" class="diagram-viewport">
+              <div id="diagram-canvas" class="diagram-canvas">
+                <div id="diagram-container" class="diagram-container"></div>
+              </div>
+            </div>
+
+            <div id="preview-placeholder" class="preview-placeholder">
+              <svg class="placeholder-icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="3"></circle><circle cx="19" cy="5" r="3"></circle><circle cx="19" cy="19" r="3"></circle><line x1="7.5" y1="10.5" x2="16.5" y2="6"></line><line x1="7.5" y1="13.5" x2="16.5" y2="18"></line></svg>
+              <p class="placeholder-title">No diagram yet</p>
+              <p class="placeholder-text">Start typing Mermaid code on the left, or load the sample.</p>
+            </div>
+
+            <div class="export-options" id="export-options">
+              <label class="checkbox-label" for="export-transparent">
+                <input type="checkbox" id="export-transparent" checked>
+                <span>Transparent background</span>
+              </label>
+              <label class="checkbox-label" for="export-scale">
+                <span>Scale</span>
+                <select id="export-scale" class="select-control select-control-sm">
+                  <option value="1">1×</option>
+                  <option value="2" selected>2×</option>
+                  <option value="3">3×</option>
+                  <option value="4">4×</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <span class="footer-meta" id="footer-hint">Tip: drag a node to move it — the code updates automatically.</span>
+            <span class="footer-meta" id="render-status">Idle</span>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast for transient feedback -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

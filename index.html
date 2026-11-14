@@ -1171,6 +1171,14 @@
       line-height: 1.6;
     }
 
+    .tools-spotlight-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
     /* Footer */
     .site-footer {
       padding: 2.5rem 0 3.5rem;
@@ -1364,7 +1372,7 @@
           <img src="images/me.jpg" alt="Sheikh Shakib Hossain" class="brand-avatar">
           <span class="brand-name">
             Sheikh Shakib Hossain
-            <span class="brand-title-badge">Lecturer, Dept. of CSE, UIU</span>
+            <!-- <span class="brand-title-badge">Lecturer, Dept. of CSE, UIU</span> -->
           </span>
         </a>
 
@@ -1378,6 +1386,11 @@
         </div>
 
         <div class="nav-actions">
+          <a href="courses/index.html" class="btn btn-outline btn-sm" title="Browse Courses Directory">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            Courses
+          </a>
+
           <a href="tools/index.html" class="btn btn-outline btn-sm" title="View Developer Tools Directory">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
             Tools
@@ -1411,6 +1424,7 @@
       <a href="#awards" class="nav-link mobile-link">International Awards</a>
       <a href="#experience" class="nav-link mobile-link">Experience</a>
       <a href="#research" class="nav-link mobile-link">Research</a>
+      <a href="courses/index.html" class="nav-link mobile-link">Courses</a>
       <a href="tools/index.html" class="nav-link mobile-link">Tools &amp; Utilities</a>
       <button type="button" class="nav-link mobile-link cv-trigger" data-cv-open>View CV (PDF)</button>
     </div>
@@ -1444,6 +1458,10 @@
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="13" y2="17"></line></svg>
               View CV
             </button>
+            <a href="courses/index.html" class="btn btn-outline btn-sm" title="Browse Courses Directory">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+              Courses
+            </a>
             <a href="tools/index.html" class="btn btn-outline btn-sm" title="Explore Developer Tools Directory">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
               Tools Directory
@@ -1986,13 +2004,19 @@
             <span class="badge badge-accent">Featured Directory</span>
             <span class="badge badge-outline">Interactive Utilities</span>
           </div>
-          <h3 class="tools-spotlight-title">Developer &amp; Web Tools Directory</h3>
+          <h3 class="tools-spotlight-title">Courses, Developer &amp; Web Tools</h3>
           <p class="tools-spotlight-desc">
-            Explore dedicated, client-side productivity utilities designed with a matching minimal black and white aesthetic — including the Bulk Gmail &amp; Domain Filter CSV tool.
+            Follow structured, self-paced courses on robotics and embedded systems, and explore dedicated,
+            client-side productivity utilities designed with a matching minimal black and white aesthetic —
+            including the Bulk Gmail &amp; Domain Filter CSV tool.
           </p>
         </div>
-        <div>
-          <a href="tools/index.html" class="btn btn-primary btn-lg">
+        <div class="tools-spotlight-actions">
+          <a href="courses/index.html" class="btn btn-primary btn-lg">
+            <span>Explore Courses</span>
+            <svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="tools/index.html" class="btn btn-outline btn-lg">
             <span>Explore Tools Directory</span>
             <svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
@@ -2013,6 +2037,7 @@
           <a href="https://www.linkedin.com/in/sheikhshakibhossa1n" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
           <a href="https://x.com/SheikhShak1b" target="_blank" rel="noopener noreferrer" class="footer-link">X (Twitter)</a>
           <a href="https://wa.me/SheikhShakibHossa1n" target="_blank" rel="noopener noreferrer" class="footer-link">WhatsApp</a>
+          <a href="courses/index.html" class="footer-link">Courses</a>
           <a href="tools/index.html" class="footer-link">Tools</a>
           <button type="button" class="footer-link cv-trigger" data-cv-open>CV</button>
         </div>
