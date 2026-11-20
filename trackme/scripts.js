@@ -6,6 +6,11 @@
 (function () {
   'use strict';
 
+  // --- Constants ---
+  // Where appointment requests are addressed. The requester's own address is
+  // added by their mail app, so the form never asks for it.
+  const CONTACT_EMAIL = 'shakib@uiu.ac.bd';
+
   // --- State ---
   const state = {
     schedule: null,       // Loaded schedule.json
@@ -38,7 +43,6 @@
 
     studentName: document.getElementById('student-name'),
     studentId: document.getElementById('student-id'),
-    studentEmail: document.getElementById('student-email'),
     studentTopic: document.getElementById('student-topic'),
 
     toast: document.getElementById('toast-notification'),
@@ -143,6 +147,24 @@
     return `${formatTime12(start)} – ${formatTime12(end)}`;
   }
 
+  /**
+   * A time range in the shortest form that still reads clearly.
+   *
+   * The repeated AM/PM on both ends is dropped when they match, so
+   * "9:10 AM – 10:10 AM" becomes "9:10 – 10:10 AM". The hour strip above
+   * the track makes the meridiem obvious anyway.
+   */
+  function formatTimeRange(startTime, endTime) {
+    const start = formatTime12(startTime);
+    const end = formatTime12(endTime);
+    const startSuffix = start.slice(-2);
+    const endSuffix = end.slice(-2);
+    if (startSuffix === endSuffix) {
+      return `${start.slice(0, -2).trim()} – ${end}`;
+    }
+    return `${start} – ${end}`;
+  }
+
   // --- Entry labels ---
   function entryTitle(entry) {
     switch (entry.type) {
@@ -177,7 +199,7 @@
       case 'counseling':
         return { text: 'Open', cls: 'badge-open' };
       case 'office':
-        return { text: 'Office', cls: '' };
+        return { text: 'Office', cls: 'badge-office' };
       default:
         return { text: 'Busy', cls: '' };
     }
@@ -249,14 +271,17 @@
     const track = document.createElement('div');
     track.className = 'timeline-track';
 
-    // Hour ticks across the top of the track.
+    // Hour ticks across the top of the track. Whole hours are labelled
+    // without the minutes ("9 AM") so that neighbouring labels do not
+    // touch each other.
     const ticks = document.createElement('div');
     ticks.className = 'timeline-ticks';
     for (let h = DAY_START / 60; h <= DAY_END / 60; h++) {
       const tick = document.createElement('span');
       tick.className = 'timeline-tick';
       tick.style.left = `${((h * 60 - DAY_START) / DAY_SPAN) * 100}%`;
-      tick.textContent = formatTime12(`${String(h).padStart(2, '0')}:00`);
+      const hour12 = h % 12 === 0 ? 12 : h % 12;
+      tick.textContent = `${hour12} ${h >= 12 ? 'PM' : 'AM'}`;
       ticks.appendChild(tick);
     }
     track.appendChild(ticks);
@@ -279,30 +304,27 @@
         seg.style.left = `${clampPct(item.start)}%`;
         seg.style.width = `${durationPct(item.end - item.start)}%`;
         seg.style.top = `${laneIndex * SEGMENT_HEIGHT_PX}px`;
-        seg.style.height = `${SEGMENT_HEIGHT_PX - 4}px`;
+        seg.style.height = `${SEGMENT_HEIGHT_PX - 6}px`;
 
         seg.setAttribute('role', 'listitem');
         seg.title = `${formatTime12(item.entry.start_time)} – ${formatTime12(item.entry.end_time)} · ${entryTitle(item.entry)}` +
           (entrySubtitle(item.entry) ? ` · ${entrySubtitle(item.entry)}` : '');
+
+        // The time range, with the title underneath it. The timeline is the
+        // only view now, so each segment has to carry both. The time comes
+        // first because it is the part the segment's position does not
+        // already show.
+        const time = document.createElement('span');
+        time.className = 'timeline-seg-time';
+        time.textContent = formatTimeRange(item.entry.start_time, item.entry.end_time);
+        seg.appendChild(time);
 
         const label = document.createElement('span');
         label.className = 'timeline-seg-label';
         label.textContent = entryTitle(item.entry);
         seg.appendChild(label);
 
-        const sub = document.createElement('span');
-        sub.className = 'timeline-seg-sub';
-        sub.textContent = formatTime12(item.entry.start_time);
-        seg.appendChild(sub);
-
-        // Very narrow segments cannot fit their text without spilling over
-        // the border, so hide the labels and rely on the tooltip + legend.
-        const widthPct = durationPct(item.end - item.start);
-        if (widthPct < 9) {
-          seg.classList.add('seg-compact');
-        } else if (widthPct < 14) {
-          seg.classList.add('seg-narrow');
-        }
+        seg.dataset.label = entryTitle(item.entry);
 
         laneArea.appendChild(seg);
       });
@@ -317,59 +339,98 @@
       laneArea.appendChild(marker);
     }
 
-    row.appendChild(track);
+    // The track sits in a scroll container so it can be swiped sideways
+    // on a narrow screen instead of being squeezed into an unreadable
+    // strip.
+    const scroll = document.createElement('div');
+    scroll.className = 'timeline-scroll';
+    scroll.appendChild(track);
+    row.appendChild(scroll);
 
-    // The legend below the track lists what happens and when, in order.
+    // A day with nothing scheduled just says so under the empty track.
     if (items.length === 0) {
       const note = document.createElement('div');
       note.className = 'day-free';
       note.textContent = 'No scheduled items — fully free.';
       row.appendChild(note);
-      return row;
     }
 
-    const list = document.createElement('ul');
-    list.className = 'timeline-legend';
-    list.setAttribute('role', 'list');
-
-    items
-      .slice()
-      .sort((a, b) => a.start - b.start)
-      .forEach(item => {
-        const li = document.createElement('li');
-        li.className = 'legend-item';
-
-        const time = document.createElement('span');
-        time.className = 'legend-time';
-        time.textContent = `${formatTime12(item.entry.start_time)} – ${formatTime12(item.entry.end_time)}`;
-
-        const title = document.createElement('span');
-        title.className = 'legend-title';
-        title.textContent = entryTitle(item.entry);
-
-        const sub = document.createElement('span');
-        sub.className = 'legend-sub';
-        sub.textContent = entrySubtitle(item.entry);
-        if (!sub.textContent) sub.remove();
-
-        const badge = document.createElement('span');
-        const badgeInfo = entryBadge(item.entry);
-        badge.className = `entry-badge ${badgeInfo.cls}`.trim();
-        badge.textContent = badgeInfo.text;
-
-        li.appendChild(time);
-        li.appendChild(title);
-        if (sub.textContent) li.appendChild(sub);
-        li.appendChild(badge);
-        list.appendChild(li);
-      });
-
-    row.appendChild(list);
     return row;
   }
 
   // Height of one lane of activity segments, in pixels.
-  const SEGMENT_HEIGHT_PX = 26;
+  const SEGMENT_HEIGHT_PX = 34;
+
+  /**
+   * Hide the parts of any timeline segment that are too narrow to show.
+   *
+   * The width of a segment depends on how wide the page is, so this has to
+   * be measured after the browser has laid the schedule out rather than
+   * guessed from the percentages. The title goes first; the time range is
+   * always kept because it is the one thing the segment's position does
+   * not already convey.
+   */
+  function trimSegmentLabels() {
+    // A hidden element used to measure how wide a piece of text really is.
+    // The label itself is clipped by CSS, so its own scrollWidth cannot be
+    // trusted for this.
+    const ruler = document.createElement('span');
+    ruler.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;left:-9999px;top:0;';
+    document.body.appendChild(ruler);
+
+    const measure = (text, cls) => {
+      ruler.className = cls;
+      ruler.textContent = text;
+      return ruler.getBoundingClientRect().width;
+    };
+
+    document.querySelectorAll('.timeline-seg').forEach(seg => {
+      const label = seg.querySelector('.timeline-seg-label');
+      const time = seg.querySelector('.timeline-seg-time');
+      if (!label || !time) return;
+
+      const segWidth = seg.clientWidth;
+      const padding = 16; // the segment's horizontal padding plus borders
+      const room = segWidth - padding;
+
+      // Restore the full text before measuring, so repeated calls do not
+      // keep shortening it.
+      const full = seg.dataset.label || label.textContent;
+      label.textContent = full;
+      label.removeAttribute('title');
+      seg.classList.remove('seg-compact', 'seg-narrow');
+
+      // The time range must always fit. Fall back to shorter forms before
+      // dropping it entirely.
+      if (measure(time.textContent, 'timeline-seg-time') > room) {
+        const short = time.textContent.replace(/\s*[AP]M/g, '');
+        if (short !== time.textContent && measure(short, 'timeline-seg-time') <= room) {
+          time.textContent = short;
+        } else {
+          const start = time.textContent.split(' – ')[0];
+          if (measure(start, 'timeline-seg-time') <= room) {
+            time.textContent = start;
+          } else {
+            seg.classList.add('seg-compact');
+            return;
+          }
+        }
+      }
+
+      // The title is dropped when there is no room left for it.
+      if (measure(full, 'timeline-seg-label') > room) {
+        const short = full.replace(/\s*[·|].*$/, '').trim();
+        if (short !== full && short.length > 0 && measure(short, 'timeline-seg-label') <= room) {
+          label.textContent = short;
+          label.title = full;
+        } else {
+          seg.classList.add('seg-compact');
+        }
+      }
+    });
+
+    ruler.remove();
+  }
 
   // Height of the hour-label row at the top of the track, in pixels.
   const TICKS_HEIGHT_PX = 18;
@@ -446,9 +507,23 @@
     el.todayStatus.textContent = statusText;
   }
 
+  /**
+   * The days of the week, ordered so the most relevant ones come first.
+   *
+   * The week starts on the day after today and ends on today itself, so the
+   * days that are still ahead of us are at the top and today is at the
+   * bottom. If today is not in the schedule, the natural order of the
+   * schedule is kept.
+   */
+  function weekOrder(days, today) {
+    const index = days.indexOf(today);
+    if (index === -1) return days.slice();
+    return days.slice(index + 1).concat(days.slice(0, index + 1));
+  }
+
   function renderWeek() {
     const now = nowInTimezone(state.timezone);
-    const days = Object.keys(state.schedule);
+    const days = weekOrder(Object.keys(state.schedule), now.day);
     let totalClasses = 0;
     let totalCounseling = 0;
 
@@ -471,13 +546,36 @@
 
       const heading = document.createElement('h3');
       heading.className = 'day-heading';
-      heading.textContent = day;
+
+      const dayName = document.createElement('span');
+      dayName.className = 'day-name';
+      dayName.textContent = day;
+      heading.appendChild(dayName);
+
       if (day === now.day) {
         const tag = document.createElement('span');
         tag.className = 'day-today';
         tag.textContent = 'Today';
         heading.appendChild(tag);
       }
+
+      // A short summary of the day, so the card can be scanned without
+      // reading the whole timeline.
+      const entries = Object.values(slots).filter(Boolean);
+      const classCount = entries.filter(e => e.type === 'class').length;
+      const counselCount = entries.filter(e => e.type === 'counseling').length;
+      const officeCount = entries.filter(e => e.type === 'office').length;
+      const summaryParts = [];
+      if (classCount) summaryParts.push(`${classCount} class${classCount === 1 ? '' : 'es'}`);
+      if (counselCount) summaryParts.push(`${counselCount} counseling`);
+      if (officeCount) summaryParts.push('office hours');
+      if (!summaryParts.length) summaryParts.push('Fully free');
+
+      const summary = document.createElement('span');
+      summary.className = 'day-summary';
+      summary.textContent = summaryParts.join(' · ');
+      heading.appendChild(summary);
+
       block.appendChild(heading);
 
       block.appendChild(buildDayTimeline(day, slots, now));
@@ -487,11 +585,15 @@
 
     el.scheduleList.innerHTML = '';
     el.scheduleList.appendChild(frag);
+
+    // The segment labels depend on the rendered width, so they can only be
+    // trimmed once the schedule is in the document and has been laid out.
+    trimSegmentLabels();
   }
 
   function renderSlots() {
     const now = nowInTimezone(state.timezone);
-    const days = Object.keys(state.schedule);
+    const days = weekOrder(Object.keys(state.schedule), now.day);
     const slots = [];
 
     days.forEach(day => {
@@ -587,7 +689,6 @@
     // The form carries `novalidate` so we can show a single, clear message
     // instead of the browser's native bubble.
     const name = el.studentName.value.trim();
-    const email = el.studentEmail.value.trim();
 
     if (!name) {
       el.formNote.textContent = 'Please enter your name.';
@@ -595,23 +696,10 @@
       return;
     }
 
-    if (!email) {
-      el.formNote.textContent = 'Please enter your email address.';
-      el.studentEmail.focus();
-      return;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      el.formNote.textContent = 'That email address does not look valid.';
-      el.studentEmail.focus();
-      return;
-    }
-
     const slot = state.selectedSlot;
     const payload = {
       name: el.studentName.value.trim(),
       studentId: el.studentId.value.trim(),
-      email: el.studentEmail.value.trim(),
       topic: el.studentTopic.value.trim(),
       day: slot.day,
       slot: slot.slotKey,
@@ -638,7 +726,9 @@
    * Build the mailto: URL for an appointment request.
    *
    * There is no backend on this static site, so the request is handed to the
-   * user's own email client. Everything stays on the device.
+   * user's own email client. Everything stays on the device. The request is
+   * addressed to the lecturer; the sender's own address is filled in by
+   * their mail app.
    */
   function buildMailto(payload) {
     const when = `${payload.day}, ${formatTime12(payload.startTime)} – ${formatTime12(payload.endTime)}`;
@@ -647,13 +737,12 @@
       `Appointment request\n` +
       `Name: ${payload.name}\n` +
       (payload.studentId ? `Student ID: ${payload.studentId}\n` : '') +
-      `Email: ${payload.email}\n` +
       (payload.topic ? `Topic: ${payload.topic}\n` : '') +
       `Slot: ${when}\n` +
       (payload.location ? `Location: ${payload.location}\n` : '') +
       `Timezone: ${payload.timezone}`;
 
-    return `mailto:?subject=${encodeURIComponent('Counseling Appointment Request')}&body=${encodeURIComponent(summary)}`;
+    return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Counseling Appointment Request')}&body=${encodeURIComponent(summary)}`;
   }
 
   // --- Toast ---
@@ -675,6 +764,14 @@
     el.themeBtn.addEventListener('click', toggleTheme);
     el.bookingForm.addEventListener('submit', handleSubmit);
     loadSchedule();
+
+    // Segment labels are trimmed to fit, so they have to be re-checked
+    // whenever the page width changes.
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(trimSegmentLabels, 120);
+    });
   }
 
   if (document.readyState === 'loading') {

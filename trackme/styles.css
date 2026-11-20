@@ -29,6 +29,24 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+
+  /* Schedule type colours — shadcn/ui palette, soft/cream tier.
+     Each type uses the palest shade as the background, a mid shade as the
+     border and the deepest shade as the text. */
+  --schedule-class: #fee2e2;
+  --schedule-class-foreground: #991b1b;
+  --schedule-class-border: #fca5a5;
+  --schedule-class-soft: #fef2f2;
+
+  --schedule-counseling: #dcfce7;
+  --schedule-counseling-foreground: #166534;
+  --schedule-counseling-border: #86efac;
+  --schedule-counseling-soft: #f0fdf4;
+
+  --schedule-office: #fef9c3;
+  --schedule-office-foreground: #854d0e;
+  --schedule-office-border: #fde047;
+  --schedule-office-soft: #fefce8;
 }
 
 .dark {
@@ -53,6 +71,24 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
   --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+
+  /* Schedule type colours — shadcn/ui palette, soft/cream tier.
+     In dark mode the pale background becomes a deep tint and the text
+     becomes the pale end of the same hue. */
+  --schedule-class: #450a0a;
+  --schedule-class-foreground: #fecaca;
+  --schedule-class-border: #991b1b;
+  --schedule-class-soft: #7f1d1d;
+
+  --schedule-counseling: #052e16;
+  --schedule-counseling-foreground: #bbf7d0;
+  --schedule-counseling-border: #166534;
+  --schedule-counseling-soft: #14532d;
+
+  --schedule-office: #422006;
+  --schedule-office-foreground: #fef08a;
+  --schedule-office-border: #a16207;
+  --schedule-office-soft: #713f12;
 }
 
 *, *::before, *::after {
@@ -360,18 +396,35 @@ body {
 }
 
 .day-block + .day-block {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .day-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--foreground);
   margin-bottom: 0.6rem;
 }
 
+.day-name {
+  white-space: nowrap;
+}
+
+/* The short summary of what happens on this day. */
+.day-summary {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .day-heading .day-today {
-  margin-left: 0.5rem;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -440,36 +493,48 @@ body {
 }
 
 .entry-badge.badge-open {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
-  border-color: var(--primary);
+  background-color: var(--schedule-counseling);
+  color: var(--schedule-counseling-foreground);
+  border-color: var(--schedule-counseling-border);
 }
 
 .entry-badge.badge-class {
-  background-color: transparent;
-  color: var(--foreground);
-  border-color: var(--foreground);
+  background-color: var(--schedule-class);
+  color: var(--schedule-class-foreground);
+  border-color: var(--schedule-class-border);
+}
+
+.entry-badge.badge-office {
+  background-color: var(--schedule-office);
+  color: var(--schedule-office-foreground);
+  border-color: var(--schedule-office-border);
 }
 
 .day-free {
   font-size: 0.8rem;
   color: var(--muted-foreground);
   font-style: italic;
-  padding: 0.35rem 0.85rem;
+  padding: 0.6rem 0.85rem 0.4rem;
 }
 
 /* --- Day timeline row (one row per day) --- */
 .timeline-row {
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) - 1px);
-  background-color: var(--secondary);
-  padding: 0.9rem 1rem 0.75rem;
+  background-color: var(--card);
+  padding: 0.9rem 1rem 0.5rem;
+}
+
+/* Lets the track be swiped sideways when the screen is too narrow. */
+.timeline-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .timeline-track {
   position: relative;
-  border-radius: 3px;
-  background-color: var(--card);
+  border-radius: calc(var(--radius) - 2px);
+  background-color: var(--secondary);
   border: 1px solid var(--border);
   overflow: hidden;
 }
@@ -486,6 +551,8 @@ body {
   inset: 0 0 auto 0;
   height: 18px;
   pointer-events: none;
+  background-color: var(--muted);
+  border-bottom: 1px solid var(--border);
 }
 
 .timeline-tick {
@@ -523,7 +590,7 @@ body {
 .timeline-seg {
   position: absolute;
   border-radius: 3px;
-  padding: 0.1rem 0.35rem;
+  padding: 0.15rem 0.4rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -535,46 +602,50 @@ body {
   min-width: 3px;
 }
 
-.timeline-seg.seg-counseling {
-  border-style: dashed;
-  background-color: var(--card);
-  color: var(--foreground);
+/* Classes — red */
+.timeline-seg.seg-class {
+  background-color: var(--schedule-class);
+  color: var(--schedule-class-foreground);
+  border-color: var(--schedule-class-border);
 }
 
+/* Counseling — green */
+.timeline-seg.seg-counseling {
+  background-color: var(--schedule-counseling);
+  color: var(--schedule-counseling-foreground);
+  border-color: var(--schedule-counseling-border);
+}
+
+/* Office hours — yellow */
 .timeline-seg.seg-office {
-  border-color: var(--border);
-  background-color: var(--muted);
-  color: var(--secondary-foreground);
+  background-color: var(--schedule-office);
+  color: var(--schedule-office-foreground);
+  border-color: var(--schedule-office-border);
+}
+
+.timeline-seg-time {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+  max-width: 100%;
 }
 
 .timeline-seg-label {
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.2;
+  line-height: 1.25;
   max-width: 100%;
 }
 
-.timeline-seg-sub {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  opacity: 0.75;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.2;
-  max-width: 100%;
-}
-
-/* Segments too narrow for two lines of text. */
-.timeline-seg.seg-narrow .timeline-seg-sub {
-  display: none;
-}
-
-.timeline-seg.seg-compact .timeline-seg-label,
-.timeline-seg.seg-compact .timeline-seg-sub {
+/* Segments too narrow to show a title without spilling out of the box. */
+.timeline-seg.seg-compact .timeline-seg-label {
   display: none;
 }
 
@@ -598,43 +669,6 @@ body {
   height: 7px;
   border-radius: 50%;
   background-color: var(--destructive, #dc2626);
-}
-
-/* Legend listing each activity under the track. */
-.timeline-legend {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 1rem;
-  margin-top: 0.7rem;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.78rem;
-  min-width: 0;
-}
-
-.legend-time {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--muted-foreground);
-  white-space: nowrap;
-}
-
-.legend-title {
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.legend-sub {
-  font-size: 0.72rem;
-  color: var(--muted-foreground);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 
@@ -692,15 +726,15 @@ body {
 }
 
 .slot[aria-checked="true"] {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
-  border-color: var(--primary);
+  background-color: var(--schedule-counseling);
+  color: var(--schedule-counseling-foreground);
+  border-color: var(--schedule-counseling-border);
 }
 
 .slot[aria-checked="true"] .slot-tag {
-  background-color: var(--primary-foreground);
-  color: var(--primary);
-  border-color: var(--primary-foreground);
+  background-color: var(--schedule-counseling-foreground);
+  color: var(--schedule-counseling);
+  border-color: var(--schedule-counseling-foreground);
 }
 
 .slot-left {
@@ -734,9 +768,9 @@ body {
   font-weight: 600;
   padding: 0.15rem 0.5rem;
   border-radius: 9999px;
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  color: var(--muted-foreground);
+  border: 1px solid var(--schedule-counseling-border);
+  background-color: var(--schedule-counseling);
+  color: var(--schedule-counseling-foreground);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -881,6 +915,32 @@ body {
   .entry-time { grid-area: time; }
   .entry-main { grid-area: main; }
   .entry-badge { grid-area: badge; justify-self: start; }
+
+  .day-heading {
+    flex-wrap: wrap;
+  }
+
+  .day-summary {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+
+  .timeline-row {
+    padding: 0.75rem 0.85rem 0.4rem;
+  }
+
+  /* The timeline needs room to be readable, so on a narrow screen it
+     scrolls sideways instead of being squeezed. */
+  .timeline-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -0.85rem;
+    padding: 0 0.85rem;
+  }
+
+  .timeline-track {
+    min-width: 620px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
