@@ -510,15 +510,15 @@
   /**
    * The days of the week, ordered so the most relevant ones come first.
    *
-   * The week starts on the day after today and ends on today itself, so the
-   * days that are still ahead of us are at the top and today is at the
-   * bottom. If today is not in the schedule, the natural order of the
+   * The week starts on today and runs forward, so today is at the top and
+   * the days closest to it come next. The days already gone by end up at
+   * the bottom. If today is not in the schedule, the natural order of the
    * schedule is kept.
    */
   function weekOrder(days, today) {
     const index = days.indexOf(today);
     if (index === -1) return days.slice();
-    return days.slice(index + 1).concat(days.slice(0, index + 1));
+    return days.slice(index).concat(days.slice(0, index));
   }
 
   function renderWeek() {
